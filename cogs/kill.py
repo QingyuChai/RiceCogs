@@ -16,7 +16,7 @@ class Kill:
         await self.bot.say("```\n" + user.name + " gets " + random.choice(my_array) + ".\n```", tts=False)
 
     @commands.command()
-    async def buttfuck(self, user : discord.Member):
+    async def shrek(self, user : discord.Member):
         """
         Fucks somebody in the... uhh... butt."""
         msg = "```\n"
