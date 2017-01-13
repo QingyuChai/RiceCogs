@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "FwiedWice",
+    "INSTALL_MSG" : "You have successfully installed rice. Use the command carefully.",
+    "NAME" : "rice",
+    "SHORT" : "[p]rice and [p]countservers, [p]countusers, rice shows serverinfo and the content SHOULD be changed",
+    "DESCRIPTION" : "[p]rice can show basic serverinfo, however the command and it's content should be changed for each server, [p]countusers and [p]countservers is self explanatory. Explanation for changes are in the code"
+}

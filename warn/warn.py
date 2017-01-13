@@ -135,7 +135,7 @@ class Warn:
 
 def check_folder():
     if not os.path.exists("data/account"):
-        print("Creating data/account/server.id folder")
+        print("Creating data/account folder")
         os.makedirs("data/account")
 
 def check_file():

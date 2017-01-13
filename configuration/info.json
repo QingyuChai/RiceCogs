@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "FwiedWice",
+    "INSTALL_MSG" : "You have successfully installed notify. Use the command carefully.",
+    "NAME" : "notify",
+    "SHORT" : "sends a message to the main channel of every server the bot is in",
+    "DESCRIPTION" : "By using [p]notify shutdown, sends a shutdown message. Otherwise, use [p]notify [message], that will send the [message] instead."
+}

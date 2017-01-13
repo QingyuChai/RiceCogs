@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "FwiedWice",
+    "INSTALL_MSG" : "You have successfully installed warn. Use the command carefully.",
+    "NAME" : "warn",
+    "SHORT" : "[p]warn and [p]clean, add warnings or remove them.",
+    "DESCRIPTION" : "By using [p]warn [user], you can warn users, and upon having 3 warnings a user will get kicked. There is also a [p]clean [user] command that removes warnings."
+}

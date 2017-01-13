@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "FwiedWice",
+    "INSTALL_MSG" : "Thank you for installing riceCogs!",
+    "NAME" : "riceCogs",
+    "SHORT" : "Utility, server management and info commands",
+    "DESCRIPTION" : "Services like notifying every server the bot is in, warning users resulting in kicks, and also showing the amount of servers the bot is in are included features."
+}
