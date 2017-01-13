@@ -20,7 +20,7 @@ class Config:
         """Notifies every server"""
         if content == "shutdown":
             for server in self.bot.servers:
-               await self.bot.send_message(server, "Bananya shutting down... Will be up again soon!")
+               await self.bot.send_message(server, "riceBot shutting down... Will be up again soon!")
             await self.bot.say("Message succesfully sent")
         else:  
             for server in self.bot.servers:
