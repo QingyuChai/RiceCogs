@@ -2,7 +2,7 @@
 {
     "AUTHOR" : "FwiedWice",
     "INSTALL_MSG" : "You have successfully installed league. Use the command carefully.",
-    "NAME" : "warn",
+    "NAME" : "league",
     "SHORT" : "champion.gg and lolwiki links for champions, also can view OPGG links for each region and summoner",
     "DESCRIPTION" : "League of legends related cogs that make it easier to find champion abilities, winrates and summoner stats."
 }
