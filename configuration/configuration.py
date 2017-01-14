@@ -13,12 +13,17 @@ class Config:
         """Notifies every server"""
         if content == "shutdown":
             for server in self.bot.servers:
-               await self.bot.send_message(server, "riceBot shutting down... Will be up again soon!")   #change name of the bot
-            await self.bot.say("Message succesfully sent")
+                try:
+                    await self.bot.send_message(server, "riceBot shutting down... Will be up again soon!")   #replace this riceBot with the name of your bot
+                except discord.errors.Forbidden:
+                    pass
         else:  
             for server in self.bot.servers:
-                await self.bot.send_message(server, content)
-            await self.bot.say("Message succesfully sent")
+                try:
+                    await self.bot.send_message(server, content)
+                except discord.errors.Forbidden:
+                    pass
+        await self.bot.say("Message succesfully sent")
     
 
     @commands.command()
