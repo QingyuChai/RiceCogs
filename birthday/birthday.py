@@ -64,9 +64,9 @@ class Birthday:
         if user == None:
             user = author
         if user.id in self.riceCog:
-            day = self.riceCog[author.id]["day"]
-            month = self.riceCog[author.id]["month"]
-            year = self.riceCog[author.id]["year"]
+            day = self.riceCog[user.id]["day"]
+            month = self.riceCog[user.id]["month"]
+            year = self.riceCog[user.id]["year"]
             await self.bot.say(str(user.name) + "'s birthday is: {}/{}/{} (DD/MM/YY).".format(day, month, year))
         else:
             msg = "You have not set your birthday yet! Do it now with rice.birthday set!"
