@@ -21,11 +21,14 @@ class Config:
     async def shout(self, server_id, *, message):
         """
         Shouts a message to the main channel of a certain server"""
-
+        msg = "```asciidoc\n"
+        msg += "Announcement :: Information\n"
+        msg += message
+        msg += "\n```"
         for server in self.bot.servers:
             if server.id == server_id:
                 try:
-                    await self.bot.send_message(server, message)
+                    await self.bot.send_message(server, msg)
                     await self.bot.say("'" + message + "'" + " has been send to " + server.name + ".")
                 except discord.errors.Forbidden:
                     await self.bot.say("I'm not allowed to do that.")
@@ -86,15 +89,23 @@ class Config:
     async def notify(self, *, content):
         """Notifies every server"""
         if content == "shutdown":
+            msg = "```asciidoc\n"
+            msg += "Announcement :: Shutdown\n"
+            msg += "riceBot shutting down... Will be up again soon!"
+            msg += "\n```"
             for server in self.bot.servers:
                 try:
-                    await self.bot.send_message(server, "riceBot shutting down... Will be up again soon!")   #replace this riceBot with the name of your bot
+                    await self.bot.send_message(server, msg)   #replace this riceBot with the name of your bot
                 except discord.errors.Forbidden:
                     pass
         else:
+            msg = "```asciidoc\n"
+            msg += "Announcement :: Information\n"
+            msg += content
+            msg += "\n```"
             for server in self.bot.servers:
                 try:
-                    await self.bot.send_message(server, content)
+                    await self.bot.send_message(server, msg)
                 except discord.errors.Forbidden:
                     pass
         await self.bot.say("Message succesfully sent")
