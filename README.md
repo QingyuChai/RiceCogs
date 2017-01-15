@@ -2,19 +2,22 @@
 
 Hello! FwiedWice here.
 
-The cogs and requirements:
+Cogs:
 - Birthday
-  Simple Birthday cog that will ask users for birthday and can show the birthdays of others
+  #Simple Birthday cog that will ask users for birthday and can show the birthdays of others
 - Code 
-  Will say what the users says in a codeblock
+  #Will say what the users says in a codeblock
 - Configuration
-  Utility cogs
+  #Utility cogs
 - Kill 
-  Not so friendly cog
+  #Not so friendly cog
 - League 
-  League of legends related cog
-  BeautifulSoup 4 is required for this due to future plans.
+  #League of legends related cog
 - Rice
-  Example of what an infobox could look like
+  #Example of what an infobox could look like
 - Warn
-  Server management cog
+  #Server management cog
+  
+Requirements:
+- BeautifulSoup4
+  #Will be required for league cog later on due to future plans
