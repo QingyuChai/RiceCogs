@@ -18,6 +18,21 @@ class Config:
 
     @commands.command()
     @checks.is_owner()
+    async def shout(self, server_id, *, message):
+        """
+        Shouts a message to the main channel of a certain server"""
+
+        for server in self.bot.servers:
+            if server.id == server_id:
+                try:
+                    await self.bot.send_message(server, message)
+                    await self.bot.say("'" + message + "'" + " has been send to " + server.name + ".")
+                except discord.errors.Forbidden:
+                    await self.bot.say("I'm not allowed to do that.")
+
+
+    @commands.command()
+    @checks.is_owner()
     async def listservers(self):
         """
         Checks what servers the bot is on"""
