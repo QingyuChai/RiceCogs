@@ -12,7 +12,7 @@ class Config:
         """
         Checks how many servers the bot is on"""
         msg = "The bot is in **"
-        msg += len(self.bot.servers)
+        msg += str(len(self.bot.servers))
         msg += "** servers."
         await self.bot.say(msg)
 
@@ -62,7 +62,7 @@ class Config:
         """
         Checks how many users the bot is connected to"""
         msg = "The bot is connected to **"
-        msg += len(set(self.bot.get_all_members()))
+        msg += str(len(set(self.bot.get_all_members())))
         msg += "** users."
         await self.bot.say(msg)
 
