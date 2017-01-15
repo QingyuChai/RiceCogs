@@ -1,7 +1,7 @@
 {
     "AUTHOR" : "FwiedWice",
     "INSTALL_MSG" : "You have successfully installed code. Use the command carefully.",
-    "NAME" : "code",
+    "NAME" : "Code",
     "SHORT" : "Outputs what the user says in a code block in a certain language.",
     "DESCRIPTION" : "Can output what the user says in different code languages. Not the most complicated command."
 }
