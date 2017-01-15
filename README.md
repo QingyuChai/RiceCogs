@@ -21,3 +21,6 @@ Cogs:
 Requirements:
 - BeautifulSoup4
   #Will be required for league cog later on due to future plans
+
+
+Find me on https://discord.gg/j29KuZz !
