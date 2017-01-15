@@ -23,4 +23,4 @@ Requirements:
   #Will be required for league cog later on due to future plans
 
 
-Find me on https://discord.gg/j29KuZz !
+Find me on https://discord.gg/j29KuZK !
