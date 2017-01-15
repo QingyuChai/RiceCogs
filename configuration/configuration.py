@@ -113,8 +113,9 @@ class Config:
 
     @commands.command()
     @checks.is_owner()
-    async def say(self, *, content):
+    async def talk(self, *, content):
         """Says something"""
         await self.bot.say(content)
+        
 def setup(bot):
     bot.add_cog(Config(bot))
