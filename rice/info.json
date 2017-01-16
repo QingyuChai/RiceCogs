@@ -2,6 +2,6 @@
     "AUTHOR" : "FwiedWice",
     "INSTALL_MSG" : "You have successfully installed rice. Use the command carefully.",
     "NAME" : "rice",
-    "SHORT" : "[p]rice to show basic bot info. Content should be changed",
+    "SHORT" : "[p]rice to show basic bot info. Now sends a welcome message upon joining a server",
     "DESCRIPTION" : "[p]rice can show basic serverinfo. Explanaiton for changes are in the code as comments."
 }
