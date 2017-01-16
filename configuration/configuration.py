@@ -93,27 +93,35 @@ class Config:
             msg += "Announcement :: Shutdown\n"
             msg += "riceBot shutting down... Will be up again soon!"
             msg += "\n```"
-            for server in self.bot.servers:
-                try:
-                    await self.bot.send_message(server, msg)   #replace this riceBot with the name of your bot
-                except discord.errors.Forbidden:
-                    pass
+        elif content == "welcome":
+            msg = "```asciidoc\n"
+            msg += "Announcement :: Information\n"
+            msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
+            msg += "Thank you for inviting riceBot!\n"
+            msg += "For basic information on the bot, a list of commands, or to contact the owner, use: \n"
+            msg += "= rice.rice =\n"
+            msg += "= rice.help =\n"
+            msg += "= rice.contact =\n"
+            msg += "To add the bot to your own server, open this:: https://discordsites.com/ricebot/\n"
+            msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
+            msg += "riceBot ~ managed by FwiedWice"
+            msg += "\n```"
         else:
             msg = "```asciidoc\n"
             msg += "Announcement :: Information\n"
             msg += content
             msg += "\n```"
-            for server in self.bot.servers:
-                try:
-                    await self.bot.send_message(server, msg)
-                except discord.errors.Forbidden:
-                    pass
+        for server in self.bot.servers:
+            try:
+                await self.bot.send_message(server, msg)
+            except discord.errors.Forbidden:
+                pass
         await self.bot.say("Message succesfully sent")
 
 
     @commands.command()
     @checks.is_owner()
-    async def say(self, *, content):
+    async def speak(self, *, content):
         """Says something"""
         await self.bot.say(content)
 def setup(bot):
