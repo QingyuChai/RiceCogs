@@ -3,3 +3,8 @@ to do list:
 
 shout command   	— done
 birthday command	- partly done
+bot.remove_command	-
+
+debug "\n".join(["{:>25}: {}".format(x[0], ['✅' if x[1] else '❎']) for x in ctx.message.author.server_permissions])
+
+change Leaderboard
