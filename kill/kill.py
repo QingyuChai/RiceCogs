@@ -29,10 +29,13 @@ class Kill:
         msg += "\"Shrek is love\", he says; \"Shrek is life\".\n```"
         await self.bot.say(msg)
 
-    @commands.command(aliases = ["od"])
-    async def overdose(self, user : discord.Member, *, stuff):
+    @commands.command(aliases = ["od"], pass_context=True)
+    async def overdose(self, ctx, user : discord.Member=None, *, stuff):
         """
         Have somebody overdose on something"""
+        author = ctx.message.author
+        if user == None:
+            user = author
         msg = "```\n"
         msg += user.name
         msg += " overdosed on "
