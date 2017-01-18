@@ -35,7 +35,7 @@ class riceBot:                                                              #cha
 
 
 
-    async def on_server_join(self, server):
+    async def server_join(self, server):
         msg = "```asciidoc\n"
         msg += "Announcement :: Information\n"
         msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
@@ -56,5 +56,5 @@ class riceBot:                                                              #cha
 
 def setup(bot):
     n = riceBot(bot)
-    bot.add_listener(n.on_server_join)
+    bot.add_listener(n.server_join, "on_server_join")
     bot.add_cog(n)                                               #change the name to what you changed the classname to in line 7
