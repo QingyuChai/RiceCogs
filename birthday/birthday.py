@@ -1,6 +1,9 @@
 """Birthday cog"""
 import discord
 import os
+import datetime
+import time
+import asyncio
 
 from __main__ import send_cmd_help
 from .utils.chat_formatting import *
@@ -13,6 +16,24 @@ class Birthday:
         self.bot = bot
         self.day = "data/account/birthday.json"
         self.riceCog = dataIO.load_json(self.day)
+
+    async def _check_date(self):
+        now = datetime.datetime.now()
+        user_count = 0
+        for users in self.riceCog:
+            user = discord.utils.get(self.bot.get_all_members(), id=users)
+            if now.day == self.riceCog[users]["day"] and now.month == self.riceCog[users]["month"]:
+                msg = "Happy Birthday!"
+                await self.bot.send_message(user, msg)
+                user_count += 1
+                user_day = user.name
+        if msg:
+            if user_count == 1:
+                await self.bot.say("{} is the only one who has his birthday today!".format(user_day))
+            else:
+                await self.bot.say("{} users have birthday today!".format(user_count))
+        else:
+            await self.bot.say("Nobody has birthday today!")
 
     @commands.group(pass_context=True)
     async def birthday(self, ctx):
@@ -72,6 +93,18 @@ class Birthday:
             msg = "You have not set your birthday yet! Do it now with rice.birthday set!"
             await self.bot.say(msg)
 
+    @checks.is_owner()
+    @birthday.command(pass_context=True)
+    async def dmloop(self, ctx):
+        """
+        Use this command **ONCE** upon starting the bot. This will check the date every day and then send users who have birthday Happy Birthday."""
+        await self.bot.say("Checking for Birthdays...")
+        while True:
+            await self._check_date()
+            await asyncio.sleep(86400)
+
+
+
 def check_folder():
     if not os.path.exists("data/account"):
         print("Creating data/account folder")
@@ -87,4 +120,5 @@ def check_file():
 def setup(bot):
     check_folder()
     check_file()
-    bot.add_cog(Birthday(bot))
+    n = Birthday(bot)
+    bot.add_cog(n)
