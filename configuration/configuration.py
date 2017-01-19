@@ -43,11 +43,11 @@ class Config:
         await self.bot.say("```asciidoc\nThe bot is in the following {} server(s):\n```".format(str(len(self.bot.servers))))
         msg = "```asciidoc\n"
         #msg += "\n"
-        msg2 = "```asciidoc\n"
-        msg3 = "```asciidoc\n"
-        messages = [msg, msg2, msg3]
+
+        messages = []
         count = 0
         for server in servers:
+            messages[count] = "```asciidoc\n"
             if len(server.members)<10:
                 messages[count] += "{:<1} :: 000{} users :: {}".format(server.id, len(server.members), server.name)
             elif len(server.members)<100:
@@ -59,9 +59,6 @@ class Config:
             messages[count] += "\n"
             if len(messages[count])>1500:
                 count = count+1
-                break
-            if len(messages[count])<25:
-                messages[count] = None
         for message in messages:
             if len(message) > 30:
                 await self.bot.say(message + "\n```")
@@ -103,7 +100,7 @@ class Config:
             msg += "Announcement :: Shutdown\n"
             msg += "riceBot shutting down... Will be up again soon!"
             msg += "\n```"
-        elif content == "welcome":
+        elif content == "info":
             msg = "```asciidoc\n"
             msg += "Announcement :: Information\n"
             msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
