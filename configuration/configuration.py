@@ -43,18 +43,31 @@ class Config:
         await self.bot.say("```asciidoc\nThe bot is in the following servers:\n```")
         msg = "```asciidoc\n"
         #msg += "\n"
-        for server in self.bot.servers:
-            if len(server.members)<10:
-                msg += "{:<1} :: 000{} users :: {}".format(server.id, len(server.members), server.name)
-            elif len(server.members)<100:
-                msg += "{:<1} :: 00{} users :: {}".format(server.id, len(server.members), server.name)
-            elif len(server.members)<1000:
-                msg += "{:<1} :: 0{} users :: {}".format(server.id, len(server.members), server.name)
-            else:
-                msg += "{:<1} :: {} users :: {}".format(server.id, len(server.members), server.name)
-            msg += "\n"
+        msg2 = "```asciidoc\n"
+        msg3 = "```asciidoc\n"
+        messages = [msg, msg2, msg3]
+        for message in messages:
+            for server in self.bot.servers:
+                if len(server.members)<10:
+                    message += "{:<1} :: 000{} users :: {}".format(server.id, len(server.members), server.name)
+                elif len(server.members)<100:
+                    message += "{:<1} :: 00{} users :: {}".format(server.id, len(server.members), server.name)
+                elif len(server.members)<1000:
+                    message += "{:<1} :: 0{} users :: {}".format(server.id, len(server.members), server.name)
+                else:
+                    message += "{:<1} :: {} users :: {}".format(server.id, len(server.members), server.name)
+                message += "\n"
+                if len(message)>2000:
+                    break
+            if len(message) < 5:
+                message = None
+            if message:
+                message += "\n```"
+                await self.bot.say(message)
+            if len(message)<2000:
+                break
+
         msg += "\n```"
-        await self.bot.say(msg)
 
 
     @commands.command(pass_context = True)
