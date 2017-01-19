@@ -42,12 +42,14 @@ class Config:
         servers = self.bot.servers
         await self.bot.say("```asciidoc\nThe bot is in the following {} server(s):\n```".format(str(len(self.bot.servers))))
         msg = "```asciidoc\n"
+        msg2 = "```asciidoc\n"
+        msg3 = "```asciidoc\n"
+        msg4 = "```asciidoc\n"
         #msg += "\n"
 
-        messages = []
+        messages = [msg, msg2, msg3, msg4]
         count = 0
         for server in servers:
-            messages[count] = "```asciidoc\n"
             if len(server.members)<10:
                 messages[count] += "{:<1} :: 000{} users :: {}".format(server.id, len(server.members), server.name)
             elif len(server.members)<100:
@@ -59,6 +61,7 @@ class Config:
             messages[count] += "\n"
             if len(messages[count])>1500:
                 count = count+1
+
         for message in messages:
             if len(message) > 30:
                 await self.bot.say(message + "\n```")
