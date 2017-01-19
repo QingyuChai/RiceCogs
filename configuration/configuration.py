@@ -57,14 +57,14 @@ class Config:
                 else:
                     message += "{:<1} :: {} users :: {}".format(server.id, len(server.members), server.name)
                 message += "\n"
-                if len(message)>2000:
+                if len(message)>1500:
                     break
             if len(message) < 5:
                 message = None
             if message:
                 message += "\n```"
                 await self.bot.say(message)
-            if len(message)<2000:
+            if len(message)<1500:
                 break
 
         msg += "\n```"
