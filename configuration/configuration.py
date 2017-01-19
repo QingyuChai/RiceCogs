@@ -40,34 +40,31 @@ class Config:
         """
         Checks what servers the bot is on"""
         servers = self.bot.servers
-        await self.bot.say("```asciidoc\nThe bot is in the following servers:\n```")
+        await self.bot.say("```asciidoc\nThe bot is in the following {} server(s):\n```".format(str(len(self.bot.servers))))
         msg = "```asciidoc\n"
         #msg += "\n"
         msg2 = "```asciidoc\n"
         msg3 = "```asciidoc\n"
         messages = [msg, msg2, msg3]
-        for message in messages:
-            for server in self.bot.servers:
-                if len(server.members)<10:
-                    message += "{:<1} :: 000{} users :: {}".format(server.id, len(server.members), server.name)
-                elif len(server.members)<100:
-                    message += "{:<1} :: 00{} users :: {}".format(server.id, len(server.members), server.name)
-                elif len(server.members)<1000:
-                    message += "{:<1} :: 0{} users :: {}".format(server.id, len(server.members), server.name)
-                else:
-                    message += "{:<1} :: {} users :: {}".format(server.id, len(server.members), server.name)
-                message += "\n"
-                if len(message)>1500:
-                    break
-            if len(message) < 5:
-                message = None
-            if message:
-                message += "\n```"
-                await self.bot.say(message)
-            if len(message)<1500:
+        count = 0
+        for server in servers:
+            if len(server.members)<10:
+                messages[count] += "{:<1} :: 000{} users :: {}".format(server.id, len(server.members), server.name)
+            elif len(server.members)<100:
+                messages[count] += "{:<1} :: 00{} users :: {}".format(server.id, len(server.members), server.name)
+            elif len(server.members)<1000:
+                messages[count] += "{:<1} :: 0{} users :: {}".format(server.id, len(server.members), server.name)
+            else:
+                messages[count] += "{:<1} :: {} users :: {}".format(server.id, len(server.members), server.name)
+            messages[count] += "\n"
+            if len(messages[count])>1500:
+                count = count+1
                 break
-
-        msg += "\n```"
+            if len(messages[count])<25:
+                messages[count] = None
+        for message in messages:
+            if len(message) > 30:
+                await self.bot.say(message + "\n```")
 
 
     @commands.command(pass_context = True)
