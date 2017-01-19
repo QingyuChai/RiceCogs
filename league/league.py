@@ -1,8 +1,14 @@
 import discord
+import aiohttp
 
 from __main__ import send_cmd_help
 from discord.ext import commands
-from bs4 import BeautifulSoup
+
+try: # check if BeautifulSoup4 is installed
+	from bs4 import BeautifulSoup
+	soupAvailable = True
+except:
+	soupAvailable = False
 
 class League:
     def __init__(self, bot):
@@ -25,12 +31,27 @@ class League:
     @league.command()
     async def champion(self, *, champion):
         """Finds a champion on http://leagueoflegends.wikia.com/."""
+        champion = champion.title()
         champion1 = "<http://leagueoflegends.wikia.com/wiki/" + champion + ">"
         champion1 = champion1.replace("'", "%27")
         await self.bot.say(champion1.replace(" ", "_"))
         champion2 = champion.replace(" ", "")
         champion2 = champion2.replace("'", "")
         await self.bot.say("<http://champion.gg/champion/" + champion2 + ">")
+
+    #@league.command(pass_context=True)
+    #async def ability(self, ctx, *, champion):
+    #    champion1 = "<http://leagueoflegends.wikia.com/wiki/" + champion + ">"
+    #    champion1 = champion1.replace("'", "%27")
+    #    champion1 = champion1.title() + "/Abilities"
+    #    url = champion1.replace(" ", "_") #build the web adress
+    #    async with aiohttp.get(url) as response:
+    #        soupObject = BeautifulSoup(await response.text(), "html.parser")
+    #    try:
+    #        online = soupObject.find(class_='champion-icon').find('data-champion=\"{}\"').find('strong').get_text()
+    #        await self.bot.say(online + ' players are playing this game at the moment')
+    #    except:
+    #        await self.bot.say("Couldn't load amount of players. No one is playing this game anymore or there's an error.")
 
     @opgg.command()
     async def na(self, *, summoner):
@@ -79,4 +100,7 @@ class League:
 
 
 def setup(bot):
-    bot.add_cog(League(bot))
+    if soupAvailable:
+        bot.add_cog(League(bot))
+    else:
+        raise RuntimeError("You need to run `pip3 install beautifulsoup4`")
