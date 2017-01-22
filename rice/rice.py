@@ -11,7 +11,8 @@ class riceBot:                                                              #cha
     async def rice(self, ctx):                                              #change the command that starts the function
         """
         Shows bot info about riceBot"""
-        channel = ctx.message.channel
+        msg_id = ctx.message.id
+        await self.bot.delete_message(ctx.message)
         msg = '```asciidoc\n'
         msg += '\n\nWhat is riceBot? :: '                                   #change the name of riceBot to name of your bot
         msg += '\nA friendly Discord bot based on Red that has a lot of handy features.'
