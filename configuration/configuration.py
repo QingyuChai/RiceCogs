@@ -2,7 +2,7 @@ import discord
 
 from cogs.utils import checks
 from discord.ext import commands
-
+from cogs.utils.chat_formatting import pagify
 class Config:
     def __init__(self, bot):
         self.bot = bot
@@ -18,20 +18,42 @@ class Config:
 
     @commands.command()
     @checks.is_owner()
-    async def shout(self, server_id, *, message):
+    async def shout(self, server_id, channel_id, *, message):
         """
         Shouts a message to the main channel of a certain server"""
         msg = "```asciidoc\n"
         msg += "Announcement :: Information\n"
         msg += message
         msg += "\n```"
+
+        if channel_id == "main":
+            channel_id = None
+            channel = None
+        else:
+            channel = discord.utils.get(self.bot.get_all_channels(), id=channel_id)
+        #Lines 38 to 69 are not written by me, are edited from TwentySix26's rift.py
+        #https://github.com/Twentysix26/26-Cogs/blob/master/LICENSE
+        #Under the GNU General Public License, I have the permission to reuse and modify this code for commercial purposes
+        #I forked the channel listing out of his code
+        #The source is https://github.com/Twentysix26/26-Cogs/tree/master/rift
+        #TwentySix26 repo can be found here https://github.com/Twentysix26/26-Cogs
+
         for server in self.bot.servers:
             if server.id == server_id:
-                try:
-                    await self.bot.send_message(server, msg)
-                    await self.bot.say("'" + message + "'" + " has been send to " + server.name + ".")
-                except discord.errors.Forbidden:
-                    await self.bot.say("I'm not allowed to do that.")
+                if channel in server.channels:
+                    try:
+                        await self.bot.send_message(channel, msg)
+                        await self.bot.say("'{}' has been sent to {} in {}.".format(message, channel.name, channel.server))
+                    except discord.errors.Forbidden:
+                        await self.bot.say("I'm not allowed to do that.")
+                else:
+                    try:
+                        await self.bot.send_message(server, msg)
+                        await self.bot.say("Couldn't find channel with id {}, so I just sent the message to the main channel instead.".format(channel_id))
+                        await self.bot.say("'{}' has been sent to {}.".format(message, server.name))
+
+                    except discord.errors.Forbidden:
+                        await self.bot.say("I'm not allowed to do that.")
 
 
     @commands.command()
