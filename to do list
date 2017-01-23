@@ -8,3 +8,6 @@ bot.remove_command	-
 debug "\n".join(["{:>25}: {}".format(x[0], ['✅' if x[1] else '❎']) for x in ctx.message.author.server_permissions])
 
 change Leaderboard
+
+
+async def weallknowitsthesaycommand(self, ctx, channel=None , *, message=None):
