@@ -31,14 +31,8 @@ class Config:
             channel = None
         else:
             channel = discord.utils.get(self.bot.get_all_channels(), id=channel_id)
-        #Lines 38 to 69 are not written by me, are edited from TwentySix26's rift.py
-        #https://github.com/Twentysix26/26-Cogs/blob/master/LICENSE
-        #Under the GNU General Public License, I have the permission to reuse and modify this code for commercial purposes
-        #I forked the channel listing out of his code
-        #The source is https://github.com/Twentysix26/26-Cogs/tree/master/rift
-        #TwentySix26 repo can be found here https://github.com/Twentysix26/26-Cogs
-
-        for server in self.bot.servers:
+      
+    for server in self.bot.servers:
             if server.id == server_id:
                 if channel in server.channels:
                     try:
