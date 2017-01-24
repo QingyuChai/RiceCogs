@@ -49,6 +49,23 @@ class Config:
                     except discord.errors.Forbidden:
                         await self.bot.say("I'm not allowed to do that.")
 
+    @commands.command()
+    @checks.is_owner()
+    async def listchannels(self, server_id):
+        """
+        Checks what text channels are in a server"""
+        server = self.bot.get_server(server_id)
+        msg = "```asciidoc\n"
+        #msg += "\n"
+        count = 0
+        for channel in server.channels:
+            if channel.type != "voice":
+                channelname = channel.name.replace("_", "-")
+                msg += "{} :: {}\n".format(channel.id, channelname)
+                count += 1
+        await self.bot.say("The server {} has {} text channels:".format(server.name, count))
+        await self.bot.say(msg + "```")
+
 
     @commands.command()
     @checks.is_owner()
@@ -114,12 +131,7 @@ class Config:
     @checks.is_owner()
     async def notify(self, *, content):
         """Notifies every server"""
-        if content == "shutdown":
-            msg = "```asciidoc\n"
-            msg += "Announcement :: Shutdown\n"
-            msg += "riceBot shutting down... Will be up again soon!"
-            msg += "\n```"
-        elif content == "info":
+        if content == "info":
             msg = "```asciidoc\n"
             msg += "Announcement :: Information\n"
             msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
@@ -144,6 +156,20 @@ class Config:
                 pass
         await self.bot.say("Message succesfully sent")
 
+    @commands.command()
+    @checks.is_owner()
+    async def shutdown(self, silently : bool=False):
+        msg = "```asciidoc\n"
+        msg += "Announcement :: Shutdown\n"
+        msg += "riceBot shutting down... Will be up again soon!"
+        msg += "\n```"
+        for server in self.bot.servers:
+            try:
+                await self.bot.send_message(server, msg)
+            except discord.errors.Forbidden:
+                pass
+        await self.bot.say("Message succesfully sent")
+        await self.bot.shutdown()
 
     @commands.command()
     @checks.is_owner()
@@ -154,4 +180,5 @@ class Config:
         await self.bot.say(content)
 
 def setup(bot):
+    bot.remove_command('shutdown')
     bot.add_cog(Config(bot))
