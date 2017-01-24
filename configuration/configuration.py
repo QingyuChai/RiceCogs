@@ -31,8 +31,8 @@ class Config:
             channel = None
         else:
             channel = discord.utils.get(self.bot.get_all_channels(), id=channel_id)
-      
-    for server in self.bot.servers:
+
+        for server in self.bot.servers:
             if server.id == server_id:
                 if channel in server.channels:
                     try:
