@@ -156,9 +156,7 @@ class Config:
                 pass
         await self.bot.say("Message succesfully sent")
 
-    @commands.command()
-    @checks.is_owner()
-    async def shutdown(self, silently : bool=False):
+    def __unload(self):
         msg = "```asciidoc\n"
         msg += "Announcement :: Shutdown\n"
         msg += "riceBot shutting down... Will be up again soon!"
@@ -180,5 +178,4 @@ class Config:
         await self.bot.say(content)
 
 def setup(bot):
-    bot.remove_command('shutdown')
     bot.add_cog(Config(bot))
