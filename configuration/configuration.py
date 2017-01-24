@@ -1,8 +1,9 @@
 import discord
-
 from cogs.utils import checks
 from discord.ext import commands
 from cogs.utils.chat_formatting import pagify
+
+
 class Config:
     def __init__(self, bot):
         self.bot = bot
@@ -44,8 +45,6 @@ class Config:
                     try:
                         await self.bot.send_message(server, msg)
                         await self.bot.say("Couldn't find channel with id {}, so I just sent the message to the main channel instead.".format(channel_id))
-                        await self.bot.say("'{}' has been sent to {}.".format(message, server.name))
-
                     except discord.errors.Forbidden:
                         await self.bot.say("I'm not allowed to do that.")
 
@@ -56,7 +55,7 @@ class Config:
         Checks what text channels are in a server"""
         server = self.bot.get_server(server_id)
         msg = "```asciidoc\n"
-        #msg += "\n"
+        # msg += "\n"
         count = 0
         for channel in server.channels:
             if channel.type != "voice":
@@ -65,7 +64,6 @@ class Config:
                 count += 1
         await self.bot.say("The server {} has {} text channels:".format(server.name, count))
         await self.bot.say(msg + "```")
-
 
     @commands.command()
     @checks.is_owner()
@@ -78,29 +76,28 @@ class Config:
         msg2 = "```asciidoc\n"
         msg3 = "```asciidoc\n"
         msg4 = "```asciidoc\n"
-        #msg += "\n"
+        # msg += "\n"
 
         messages = [msg, msg2, msg3, msg4]
         count = 0
         for server in servers:
-            if len(server.members)<10:
+            if len(server.members) < 10:
                 messages[count] += "{:<1} :: 000{} users :: {}".format(server.id, len(server.members), server.name)
-            elif len(server.members)<100:
+            elif len(server.members) < 100:
                 messages[count] += "{:<1} :: 00{} users :: {}".format(server.id, len(server.members), server.name)
-            elif len(server.members)<1000:
+            elif len(server.members) < 1000:
                 messages[count] += "{:<1} :: 0{} users :: {}".format(server.id, len(server.members), server.name)
             else:
                 messages[count] += "{:<1} :: {} users :: {}".format(server.id, len(server.members), server.name)
             messages[count] += "\n"
-            if len(messages[count])>1500:
-                count = count+1
+            if len(messages[count]) > 1500:
+                count = count + 1
 
         for message in messages:
             if len(message) > 30:
                 await self.bot.say(message + "\n```")
 
-
-    @commands.command(pass_context = True)
+    @commands.command(pass_context=True)
     @checks.is_owner()
     async def discrim(self, ctx, discriminator):
         """
@@ -116,7 +113,6 @@ class Config:
                     msg += r.name
                     msg += "\n```"
         await self.bot.say(msg)
-
 
     @commands.command()
     async def countusers(self):
@@ -157,25 +153,25 @@ class Config:
         await self.bot.say("Message succesfully sent")
 
     def __unload(self):
-        msg = "```asciidoc\n"
-        msg += "Announcement :: Shutdown\n"
-        msg += "riceBot shutting down... Will be up again soon!"
-        msg += "\n```"
+        self.bot.loop.create_task(self.task())
+
+    async def task(self):
+        msg = ("```asciidoc\n"
+               "Announcement :: Shutdown\n"
+               "riceBot shutting down... Will be up again soon!"
+               "\n```")
         for server in self.bot.servers:
             try:
                 await self.bot.send_message(server, msg)
-            except discord.errors.Forbidden:
+            except:
                 pass
-        await self.bot.say("Message succesfully sent")
-        await self.bot.shutdown()
 
     @commands.command()
     @checks.is_owner()
-
     async def speak(self, *, content):
-
         """Says something"""
         await self.bot.say(content)
+
 
 def setup(bot):
     bot.add_cog(Config(bot))
