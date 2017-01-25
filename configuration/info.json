@@ -3,5 +3,5 @@
     "INSTALL_MSG" : "You have successfully installed configurations. Use the command carefully.",
     "NAME" : "Config",
     "SHORT" : "Basic utility cogs such as list the servers the bot is in, usercount, and listing the users with the same discriminator ",
-    "DESCRIPTION" : "By using [p]notify shutdown, sends a shutdown message. Otherwise, use [p]notify [message], that will send the [message] instead. Also, use [p]listservers to list the servers the bot is in: serverid + usercount + servername"
+    "DESCRIPTION" : "[p]notify sends a message to every channel the bot is in, [p]channelset sets the channel the bot sends the notification in (you have to use channelset on the server), rest is self explanatory"
 }
