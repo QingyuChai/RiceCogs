@@ -1,4 +1,7 @@
 import discord
+import os
+
+from .utils.dataIO import fileIO, dataIO
 from cogs.utils import checks
 from discord.ext import commands
 from cogs.utils.chat_formatting import pagify
@@ -7,6 +10,29 @@ from cogs.utils.chat_formatting import pagify
 class Config:
     def __init__(self, bot):
         self.bot = bot
+        self.profile = "data/servers/serverlist.json"
+        self.riceCog = dataIO.load_json(self.profile)
+
+    @checks.admin_or_permissions(manage_server=True)
+    @commands.command(pass_context=True)
+    async def channelset(self, ctx, channel_id):
+        """Set channel where announcements arrive"""
+        server = ctx.message.server
+        for channel in server.channels:
+            try:
+                if int(channel_id) == channel.id:
+                    break
+            except:
+                await self.bot.say("Enter a valid channel ID.")
+                return
+        if server.id in self.riceCog:
+            pass
+        else:
+            self.riceCog[server.id] = {}
+        self.riceCog[server.id].update({"Channel" : channel_id})
+        dataIO.save_json(self.profile, self.riceCog)
+        await self.bot.say("Succesfully changed the channel to get notifications in.")
+
 
     @commands.command()
     async def countservers(self):
@@ -146,25 +172,55 @@ class Config:
             msg += content
             msg += "\n```"
         for server in self.bot.servers:
-            try:
-                await self.bot.send_message(server, msg)
-            except discord.errors.Forbidden:
-                pass
+            if server.id in self.riceCog:
+                try:
+                    channel_id  = self.riceCog[server.id]["Channel"]
+                    channel = self.bot.get_channel(channel_id)
+                    await self.bot.send_message(channel, msg)
+                except:
+                    pass
+            else:
+                try:
+                    await self.bot.send_message(server, msg)
+                except:
+                    pass
         await self.bot.say("Message succesfully sent")
 
-    def __unload(self):
-        self.bot.loop.create_task(self.task())
+    #def __shutdown(self):
+    #   """Credits to Kowlin for this"""
+    #    self.bot.loop.create_task(self.task())
 
-    async def task(self):
+    #async def task(self):
+    #    msg = ("```asciidoc\n"
+    #           "Announcement :: Shutdown\n"
+    #           "riceBot shutting down... Will be up again soon!"
+    #           "\n```")
+    #    for server in self.bot.servers:
+    #        try:
+    #            await self.bot.send_message(server, msg)
+    #        except:
+    #            pass
+    #    await self.bot.say("asdasd")
+
+    @commands.command()
+    @checks.is_owner()
+    async def shutdown(self, silently : bool=False):
         msg = ("```asciidoc\n"
-               "Announcement :: Shutdown\n"
-               "riceBot shutting down... Will be up again soon!"
-               "\n```")
+                   "Announcement :: Shutdown\n"
+                   "riceBot shutting down... Will be up again soon!"
+                   "\n```")
+        """Shuts down Red"""
         for server in self.bot.servers:
-            try:
-                await self.bot.send_message(server, msg)
-            except:
-                pass
+                try:
+                    await self.bot.send_message(server, msg)
+                except:
+                    pass
+        try: # We don't want missing perms to stop our shutdown
+            if not silently:
+                await self.bot.say("Shutting down... ")
+        except:
+            pass
+        await self.bot.shutdown()
 
     @commands.command()
     @checks.is_owner()
@@ -173,5 +229,20 @@ class Config:
         await self.bot.say(content)
 
 
+def check_folder():
+    if not os.path.exists("data/servers"):
+        print("Creating data/servers folder")
+        os.makedirs("data/servers")
+
+def check_file():
+    data = {}
+    f = "data/servers/serverlist.json"
+    if not dataIO.is_valid_json(f):
+        print("Creating data/servers/serverlist.json")
+        dataIO.save_json(f, data)
+
 def setup(bot):
+    check_folder()
+    check_file()
+    bot.remove_command('shutdown')
     bot.add_cog(Config(bot))
