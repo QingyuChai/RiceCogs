@@ -15,21 +15,14 @@ class Config:
 
     @checks.admin_or_permissions(manage_server=True)
     @commands.command(pass_context=True)
-    async def channelset(self, ctx, channel_id):
+    async def channelset(self, ctx, channel : discord.Channel):
         """Set channel where announcements arrive"""
         server = ctx.message.server
-        for channel in server.channels:
-            try:
-                if int(channel_id) == channel.id:
-                    break
-            except:
-                await self.bot.say("Enter a valid channel ID.")
-                return
         if server.id in self.riceCog:
             pass
         else:
             self.riceCog[server.id] = {}
-        self.riceCog[server.id].update({"Channel" : channel_id})
+        self.riceCog[server.id].update({"Channel" : channel.id})
         dataIO.save_json(self.profile, self.riceCog)
         await self.bot.say("Succesfully changed the channel to get notifications in.")
 
