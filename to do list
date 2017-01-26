@@ -12,4 +12,5 @@ change Leaderboard	- yet to start
 
 
 shout across channels	- done
-list channels 		- await self.bot.say(channel.type)
+list channels 		- done
+functions		- 
