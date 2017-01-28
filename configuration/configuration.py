@@ -12,6 +12,24 @@ class Config:
         self.bot = bot
         self.profile = "data/servers/serverlist.json"
         self.riceCog = dataIO.load_json(self.profile)
+        self.down_message = "data/servers/down_message.json"
+        self.down = dataIO.load_json(self.down_message)
+
+    async def _message_servers(self, ctx, msg):
+        for server in self.bot.servers:
+            if server.id in self.riceCog:
+                try:
+                    channel_id  = self.riceCog[server.id]["Channel"]
+                    channel = self.bot.get_channel(channel_id)
+                    await self.bot.send_message(channel, msg)
+                except:
+                    pass
+            else:
+                try:
+                    await self.bot.send_message(server, msg)
+                except:
+                    pass
+        await self.bot.say("Message succesfully sent")
 
     @checks.admin_or_permissions(manage_server=True)
     @commands.command(pass_context=True)
@@ -142,9 +160,9 @@ class Config:
         msg += "** users."
         await self.bot.say(msg)
 
-    @commands.command()
+    @commands.command(pass_context=True)
     @checks.is_owner()
-    async def notify(self, *, content):
+    async def notify(self, ctx, *, content):
         """Notifies every server"""
         if content == "info":
             msg = "```asciidoc\n"
@@ -164,20 +182,7 @@ class Config:
             msg += "Announcement :: Information\n"
             msg += content
             msg += "\n```"
-        for server in self.bot.servers:
-            if server.id in self.riceCog:
-                try:
-                    channel_id  = self.riceCog[server.id]["Channel"]
-                    channel = self.bot.get_channel(channel_id)
-                    await self.bot.send_message(channel, msg)
-                except:
-                    pass
-            else:
-                try:
-                    await self.bot.send_message(server, msg)
-                except:
-                    pass
-        await self.bot.say("Message succesfully sent")
+        await self._message_servers(ctx, msg)
 
     #def __shutdown(self):
     #   """Credits to Kowlin for this"""
@@ -195,19 +200,34 @@ class Config:
     #            pass
     #    await self.bot.say("asdasd")
 
-    @commands.command()
+
+    @commands.command(pass_context=True)
     @checks.is_owner()
-    async def shutdown(self, silently : bool=False):
-        msg = ("```asciidoc\n"
+    async def setshutdownmsg(self, ctx, *, msg : str=None):
+        """Sets the shutdown message"""
+        if msg == None:
+            msg = ("```asciidoc\n"
                    "Announcement :: Shutdown\n"
                    "riceBot shutting down... Will be up again soon!"
                    "\n```")
-        """Shuts down Red"""
-        for server in self.bot.servers:
-                try:
-                    await self.bot.send_message(server, msg)
-                except:
-                    pass
+        await self.bot.say("The shutdown message is: ")
+        await self.bot.say(msg)
+        self.down.update({"Message" : msg})
+        dataIO.save_json(self.down_message, self.down)
+
+
+    @commands.command(pass_context=True)
+    @checks.is_owner()
+    async def shutdown(self, ctx, silently : bool=False):
+        """Shuts down riceBot"""
+        if "Message" in self.down:
+            msg = self.down["Message"]
+        else:
+            msg = ("```asciidoc\n"
+                   "Announcement :: Shutdown\n"
+                   "riceBot shutting down... Will be up again soon!"
+                   "\n```")
+        await self._message_servers(ctx, msg)
         try: # We don't want missing perms to stop our shutdown
             if not silently:
                 await self.bot.say("Shutting down... ")
@@ -234,8 +254,16 @@ def check_file():
         print("Creating data/servers/serverlist.json")
         dataIO.save_json(f, data)
 
+def check_file1():
+    data = {}
+    f = "data/servers/down_message.json"
+    if not dataIO.is_valid_json(f):
+        print("Creating data/servers/down_message.json")
+        dataIO.save_json(f, data)
+
 def setup(bot):
     check_folder()
     check_file()
+    check_file1()
     bot.remove_command('shutdown')
     bot.add_cog(Config(bot))
