@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "FwiedWice",
+    "INSTALL_MSG" : "You have successfully installed waitroom. Use the command carefully.",
+    "NAME" : "Waitroom",
+    "SHORT" : "Waitroom commands",
+    "DESCRIPTION" : "A waitroom cog that will assign a user a role if he enters a keyword after doing !register"
+}
