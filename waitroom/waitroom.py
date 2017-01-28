@@ -61,11 +61,15 @@ class Waitroom:
             if msg.content.lower().strip() == "agreed":
                 try:
                     for role in server.roles:
-                        if role.name == default_role:
-                            await self.bot.add_roles(author, role)
-                            await self.bot.say("Congratulations!")
+                        if role.name.lower() == default_role.lower():
+                            userrole = role
+                            break
+                    await self.bot.add_roles(author, userrole)
+                    await self.bot.say("Congratulations!")
+                except discord.errors.Forbidden:
+                    await self.bot.say("Try checking bot permissions!")
                 except:
-                    await self.bot.say("Try setting the role again or check bot permissions!")
+                    await self.bot.say("Try checking the role again!")
             else:
                 await self.bot.say("Try again!")
         else:
