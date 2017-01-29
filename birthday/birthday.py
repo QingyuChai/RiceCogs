@@ -20,6 +20,7 @@ class Birthday:
     async def _check_date(self):
         now = datetime.datetime.now()
         user_count = 0
+        users_today = ""
         for users in self.riceCog:
             user = discord.utils.get(self.bot.get_all_members(), id=users)
             if now.day == self.riceCog[users]["day"] and now.month == self.riceCog[users]["month"]:
@@ -27,11 +28,13 @@ class Birthday:
                 await self.bot.send_message(user, msg)
                 user_count += 1
                 user_day = user.name
+                users_today += "{} has their birthday today!\n".format(user.name)
         if msg:
             if user_count == 1:
-                await self.bot.say("{} is the only one who has his birthday today!".format(user_day))
+                await self.bot.say("{} is the only one who has their birthday today!".format(user_day))
             else:
                 await self.bot.say("{} users have birthday today!".format(user_count))
+                await self.bot.say(users_today)
         else:
             await self.bot.say("Nobody has birthday today!")
 
