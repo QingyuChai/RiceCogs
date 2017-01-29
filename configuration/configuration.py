@@ -164,15 +164,16 @@ class Config:
     @checks.is_owner()
     async def notify(self, ctx, *, content):
         """Notifies every server"""
+        prefix = ctx.prefix
         if content == "info":
             msg = "```asciidoc\n"
             msg += "Announcement :: Information\n"
             msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
             msg += "Thank you for inviting riceBot!\n"
             msg += "For basic information on the bot, a list of commands, or to contact the owner, use: \n"
-            msg += "= rice.rice =\n"
-            msg += "= rice.help =\n"
-            msg += "= rice.contact =\n"
+            msg += "= {}rice =\n".format(prefix)
+            msg += "= {}help =\n".format(prefix)
+            msg += "= {}contact =\n".format(prefix)
             msg += "To add the bot to your own server, open this:: https://discordsites.com/ricebot/\n"
             msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
             msg += "riceBot ~ managed by FwiedWice"
@@ -200,7 +201,7 @@ class Config:
     #            pass
     #    await self.bot.say("asdasd")
 
-
+    #Credits to Kowlin for formatting!
     @commands.command(pass_context=True)
     @checks.is_owner()
     async def setshutdownmsg(self, ctx, *, msg : str=None):
