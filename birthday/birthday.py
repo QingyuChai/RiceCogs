@@ -85,6 +85,7 @@ class Birthday:
         """
         Show the birthday of a user"""
         author = ctx.message.author
+        prefix = ctx.prefix
         if user == None:
             user = author
         if user.id in self.riceCog:
@@ -93,7 +94,7 @@ class Birthday:
             year = self.riceCog[user.id]["year"]
             await self.bot.say(str(user.name) + "'s birthday is: {}/{}/{} (DD/MM/YY).".format(day, month, year))
         else:
-            msg = "You have not set your birthday yet! Do it now with rice.birthday set!"
+            msg = "You have not set your birthday yet! Do it now with {}birthday set!".format(prefix)
             await self.bot.say(msg)
 
     @checks.is_owner()
