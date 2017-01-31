@@ -16,6 +16,9 @@ class Birthday:
         self.bot = bot
         self.day = "data/account/birthday.json"
         self.riceCog = dataIO.load_json(self.day)
+        self.bot.say("Checking for Birthdays...")
+        global loopistrue
+        loopistrue = False
 
     async def _check_date(self):
         now = datetime.datetime.now()
@@ -98,14 +101,25 @@ class Birthday:
             await self.bot.say(msg)
 
     @checks.is_owner()
-    @birthday.command(pass_context=True)
-    async def dmloop(self, ctx):
-        """
-        Use this command **ONCE** upon starting the bot. This will check the date every day and then send users who have birthday Happy Birthday."""
-        await self.bot.say("Checking for Birthdays...")
-        while True:
+    @birthday.command()
+    async def dmloop(self):
+        global loopistrue
+        if loopistrue:
+            await self.bot.say("There is a loop going on right now!")
+            return
+        else:
+            loopistrue = True
+        global loopedieloop
+        loopedieloop = True
+        while loopedieloop:
             await self._check_date()
             await asyncio.sleep(86400)
+
+    def __unload(self):
+        global loopedieloop
+        loopedieloop = False
+        print("Stopped checking for birthdays...")
+
 
 
 
