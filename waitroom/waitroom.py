@@ -17,6 +17,7 @@ class Waitroom:
 
 
     @commands.command(pass_context=True)
+    @checks.admin_or_permissions(manage_server=True)
     async def setwaitroom(self, ctx, channel : discord.Channel):
         server = ctx.message.server
         if server.id not in self.riceCog:
@@ -27,7 +28,9 @@ class Waitroom:
             dataIO.save_json(self.waitroom, self.riceCog)
         await self.bot.say("Succesfully changed the *Waitroom* channel to {}".format(channel.name))
 
+
     @commands.command(pass_context=True)
+    @checks.admin_or_permissions(manage_server=True)
     async def setdefaultrole(self, ctx, default_role):
         server = ctx.message.server
         count = 0
@@ -46,7 +49,7 @@ class Waitroom:
         else:
             self.roleset[server.id] = default_role
             dataIO.save_json(self.defaultrole, self.roleset)
-        await self.bot.say("Succesfully changed the default *role*  to {}!".format(default_role))
+        await self.bot.say("Succesfully changed the default *role* to {}!".format(default_role))
 
     @commands.command(pass_context=True)
     async def register(self, ctx):
@@ -54,6 +57,7 @@ class Waitroom:
         server = author.server
         channel = ctx.message.channel
         user = author
+        prefix = ctx.prefix
         if server.id in self.riceCog and server.id in self.roleset:
             default_role = self.roleset[server.id]
             await self.bot.say("Type **agreed** to get access to the server.")
@@ -73,8 +77,8 @@ class Waitroom:
             else:
                 await self.bot.say("Try again!")
         else:
-            await self.bot.say("You did not set the *Waitroom* channel yet! To do so, do [p]setwaitroom [channel]!")
-            await self.bot.say("Also, set the default role using [p]setdefaultrole [rolename]!")
+            await self.bot.say("You did not set the *Waitroom* channel yet! To do so, do {}setwaitroom [channel]!".format(prefix))
+            await self.bot.say("Also, set the default role using {}setdefaultrole [rolename]!".format(prefix))
 
 
 def check_folder():
