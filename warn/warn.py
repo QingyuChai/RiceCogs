@@ -2,14 +2,11 @@
 import discord
 import os
 import shutil
-import aiohttp
-import asyncio
-import os
 
 from .utils.chat_formatting import *
 from .utils.dataIO import fileIO, dataIO
 from .utils import checks
-from discord.ext import commands 
+from discord.ext import commands
 from enum import Enum
 from __main__ import send_cmd_help
 
@@ -25,12 +22,12 @@ class Warn:
     @checks.admin_or_permissions(kick_members=True)
     async def warn(self, ctx, user : discord.Member):
         """Warns the user - At 3 warnings the user gets kicked"""
-       
+
         server = ctx.message.server
         author = ctx.message.author
 
         #checks if the user is in the file
-        
+
         if server.id not in self.riceCog:
             self.riceCog[server.id] = {}
             dataIO.save_json(self.profile, self.riceCog)
@@ -74,8 +71,8 @@ class Warn:
             data = discord.Embed(colour=discord.Colour(value=colour))
             data.add_field(name="Warning", value=msg)
             data.set_footer(text="riceBot")
-            await self.bot.say(embed=data) 
-            
+            await self.bot.say(embed=data)
+
             count = "2"
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
@@ -85,7 +82,7 @@ class Warn:
             data.add_field(name="Warning", value=msg)
             data.set_footer(text="riceBot")
             await self.bot.say(embed=data)
-           
+
             count = "1"
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
@@ -121,8 +118,8 @@ class Warn:
             data = discord.Embed(colour=discord.Colour(value=colour))
             data.add_field(name="Warning", value=msg)
             data.set_footer(text="riceBot")
-            await self.bot.say(embed=data) 
-            
+            await self.bot.say(embed=data)
+
             count = "0"
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
@@ -144,7 +141,7 @@ def check_file():
     if not dataIO.is_valid_json(f):
         print("Creating data/account/warnings.json")
         dataIO.save_json(f, data)
- 
+
 def setup(bot):
     check_folder()
     check_file()
