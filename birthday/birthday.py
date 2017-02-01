@@ -71,7 +71,7 @@ class Birthday:
             return
 
         author = ctx.message.author
-        if author.id not in self.riceCog:
+        if author.id not in self.riceCog or self.riceCog[author.id] == False:
             self.riceCog[author.id] = {}
             dataIO.save_json(self.day, self.riceCog)
         self.riceCog[author.id].update({"day" : day})
@@ -83,6 +83,18 @@ class Birthday:
         year = self.riceCog[author.id]["year"]
         await self.bot.say("Your birthday is: {}/{}/{} (DD/MM/YY).".format(day, month, year))
 
+    @birthday.command(pass_context=True, name="remove", aliases=["del", "rem"])
+    async def _remove(self, ctx):
+        author = ctx.message.author
+        if author.id not in self.riceCog or self.riceCog[author.id] == False:
+            await self.bot.say("You did not set your birthday yet!")
+            return
+        else:
+            self.riceCog[author.id] = False
+            dataIO.save_json(self.day, self.riceCog)
+            await self.bot.say("Birthday succesfully removed!")
+
+
     @birthday.command(pass_context=True)
     async def show(self, ctx, *, user: discord.Member=None):
         """
@@ -91,7 +103,7 @@ class Birthday:
         prefix = ctx.prefix
         if user == None:
             user = author
-        if user.id in self.riceCog:
+        if user.id in self.riceCog and self.riceCog[user.id] != False:
             day = self.riceCog[user.id]["day"]
             month = self.riceCog[user.id]["month"]
             year = self.riceCog[user.id]["year"]
