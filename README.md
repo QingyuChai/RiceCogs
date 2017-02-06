@@ -1,7 +1,7 @@
 # RiceCogs
 
 Red - Support Server
-- discord.gg/red
+- https://discordapp.com/invite/red
 
 Hello! FwiedWice here.
 
