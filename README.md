@@ -1,5 +1,8 @@
 # RiceCogs
 
+Red - Support Server
+- discord.gg/red
+
 Hello! FwiedWice here.
 
 Cogs:
@@ -24,3 +27,4 @@ Requirements:
 
 
 Find me on https://discord.gg/j29KuZK !
+
