@@ -2,6 +2,9 @@
 import discord
 import os
 import shutil
+import aiohttp
+import asyncio
+import os
 
 from .utils.chat_formatting import *
 from .utils.dataIO import fileIO, dataIO
@@ -25,7 +28,9 @@ class Warn:
 
         server = ctx.message.server
         author = ctx.message.author
-
+        if user.id == self.bot.id:
+            await self.bot.say("You can't warn me, dummy.")
+            return
         #checks if the user is in the file
 
         if server.id not in self.riceCog:
@@ -132,7 +137,7 @@ class Warn:
 
 def check_folder():
     if not os.path.exists("data/account"):
-        print("Creating data/account folder")
+        print("Creating data/account/server.id folder")
         os.makedirs("data/account")
 
 def check_file():
