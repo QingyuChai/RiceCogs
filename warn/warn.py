@@ -28,7 +28,7 @@ class Warn:
 
         server = ctx.message.server
         author = ctx.message.author
-        if user.id == self.bot.id:
+        if user.id == self.bot.user.id:
             await self.bot.say("You can't warn me, dummy.")
             return
         #checks if the user is in the file
