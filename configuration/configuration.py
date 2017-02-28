@@ -220,13 +220,13 @@ class Config:
     @commands.command(pass_context=True)
     @checks.is_owner()
     async def shutdown(self, ctx, silently : bool=False):
-        """Shuts down riceBot"""
+        """Shuts down the bot"""
         if "Message" in self.down:
             msg = self.down["Message"]
         else:
             msg = ("```asciidoc\n"
                    "Announcement :: Shutdown\n"
-                   "riceBot shutting down... Will be up again soon!"
+                   "Bot shutting down... Will be up again soon!"
                    "\n```")
         await self._message_servers(ctx, msg)
         try: # We don't want missing perms to stop our shutdown
