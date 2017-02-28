@@ -165,43 +165,14 @@ class Config:
     async def notify(self, ctx, *, content):
         """Notifies every server"""
         prefix = ctx.prefix
-        if content == "info":
-            msg = "```asciidoc\n"
-            msg += "Announcement :: Information\n"
-            msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
-            msg += "Thank you for inviting riceBot!\n"
-            msg += "For basic information on the bot, a list of commands, or to contact the owner, use: \n"
-            msg += "= {}rice =\n".format(prefix)
-            msg += "= {}help =\n".format(prefix)
-            msg += "= {}contact =\n".format(prefix)
-            msg += "To add the bot to your own server, open this:: https://discordsites.com/ricebot/\n"
-            msg += "= -=-=-=-=-=-=-=-=-=-=-=- =\n"
-            msg += "riceBot ~ managed by FwiedWice"
-            msg += "\n```"
-        else:
-            msg = "```asciidoc\n"
-            msg += "Announcement :: Information\n"
-            msg += content
-            msg += "\n```"
+
+        msg = "```asciidoc\n"
+        msg += "Announcement :: Information\n"
+        msg += content
+        msg += "\n```"
+
         await self._message_servers(ctx, msg)
 
-    #def __shutdown(self):
-    #   """Credits to Kowlin for this"""
-    #    self.bot.loop.create_task(self.task())
-
-    #async def task(self):
-    #    msg = ("```asciidoc\n"
-    #           "Announcement :: Shutdown\n"
-    #           "riceBot shutting down... Will be up again soon!"
-    #           "\n```")
-    #    for server in self.bot.servers:
-    #        try:
-    #            await self.bot.send_message(server, msg)
-    #        except:
-    #            pass
-    #    await self.bot.say("asdasd")
-
-    #Credits to Kowlin for formatting!
     @commands.command(pass_context=True)
     @checks.is_owner()
     async def setshutdownmsg(self, ctx, *, msg : str=None):
@@ -209,7 +180,7 @@ class Config:
         if msg == None:
             msg = ("```asciidoc\n"
                    "Announcement :: Shutdown\n"
-                   "riceBot shutting down... Will be up again soon!"
+                   "Bot shutting down... Will be up again soon!"
                    "\n```")
         await self.bot.say("The shutdown message is: ")
         await self.bot.say(msg)
