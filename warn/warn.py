@@ -1,4 +1,8 @@
 """Warning cog"""
+
+#Credits go to Twentysix26 for modlog
+#https://github.com/Twentysix26/Red-DiscordBot/blob/develop/cogs/mod.py
+
 import discord
 import os
 import shutil
@@ -20,17 +24,21 @@ class Warn:
         self.bot = bot
         self.profile = "data/account/warnings.json"
         self.riceCog = dataIO.load_json(self.profile)
+        try:
+            self._cog = self.bot.get_cog("Mod")
+        except:
+            print("You need the mod cog to properly run warn")
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
-    async def warn(self, ctx, user : discord.Member):
-        """Warns the user - At 3 warnings the user gets kicked"""
+    async def warn(self, ctx, user : discord.Member, *, reason=None):
+        """Warns the user - At 3 warnings the user gets kicked
+
+        Thank you, 26, for the modlog"""
 
         server = ctx.message.server
         author = ctx.message.author
-        if user.id == self.bot.user.id:
-            await self.bot.say("You can't warn me, dummy.")
-            return
+
         #checks if the user is in the file
 
         if server.id not in self.riceCog:
@@ -62,9 +70,22 @@ class Warn:
                 msg = str(user.name) + " has been **kicked** after 3 warnings."
                 data = discord.Embed(colour=discord.Colour(value=colour))
                 data.add_field(name="Warning", value=msg)
+                if reason:
+                    data.add_field(name="Reason", value=reason, inline=False)
                 data.set_footer(text="riceBot")
                 await self.bot.say(embed=data)
                 await self.bot.kick(user)
+                if reason:
+                    await self._cog.new_case(server,
+                                        action="3rd Warning. Kick \N{WOMANS BOOTS}",
+                                        mod=author,
+                                        user=user,
+                                        reason=reason)
+                else:
+                    await self._cog.new_case(server,
+                                        action="3rd Warning. Kick \N{WOMANS BOOTS}",
+                                        mod=author,
+                                        user=user)
             except discord.errors.Forbidden:
                 await self.bot.say("I'm not allowed to do that.")
             except Exception as e:
@@ -75,22 +96,48 @@ class Warn:
             msg = str(user.mention) + ", you have received your second warning! One more warning and you will be **kicked**!"
             data = discord.Embed(colour=discord.Colour(value=colour))
             data.add_field(name="Warning", value=msg)
+            if reason:
+                data.add_field(name="Reason", value=reason, inline=False)
             data.set_footer(text="riceBot")
             await self.bot.say(embed=data)
 
             count = "2"
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
+            if reason:
+                await self._cog.new_case(server,
+                                    action="2nd Warning.",
+                                    mod=author,
+                                    user=user,
+                                    reason=reason)
+            else:
+                await self._cog.new_case(server,
+                                    action="2nd Warning.",
+                                    mod=author,
+                                    user=user)
         else:
             msg = str(user.mention) + ", you have received your first warning! At three warnings you will be **kicked**!"
             data = discord.Embed(colour=discord.Colour(value=colour))
             data.add_field(name="Warning", value=msg)
+            if reason:
+                data.add_field(name="Reason", value=reason, inline=False)
             data.set_footer(text="riceBot")
             await self.bot.say(embed=data)
 
             count = "1"
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
+            if reason:
+                await self._cog.new_case(server,
+                                    action="1st Warning.",
+                                    mod=author,
+                                    user=user,
+                                    reason=reason)
+            else:
+                await self._cog.new_case(server,
+                                    action="1st Warning.",
+                                    mod=author,
+                                    user=user)
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
