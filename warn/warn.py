@@ -35,10 +35,17 @@ class Warn:
         """Warns the user - At 3 warnings the user gets kicked
 
         Thank you, 26, for the modlog"""
-
         server = ctx.message.server
         author = ctx.message.author
+        channel = ctx.message.channel
 
+        can_kick = channel.permissions_for(server.me).kick_members
+
+        if can_kick:
+            pass
+        else:
+            await self.bot.say("The bot does not have permission to kick.")
+            return
         #checks if the user is in the file
 
         if server.id not in self.riceCog:
