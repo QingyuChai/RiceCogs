@@ -63,7 +63,8 @@ class Warn:
             await self.bot.say(message.format(msg, kick, _max))
 
     @_warnset.command(no_pm=True, pass_context=True)
-    @checks.admin_or_permissions(kick_members=True, manage_server=True)
+    @checks.mod_or_permissions(
+      =True, manage_server=True)
     async def max(self, ctx, limit : int):
         server = ctx.message.server
 
@@ -72,7 +73,7 @@ class Warn:
         await self.bot.say("Warn limit is now: \n{}".format(limit))
 
     @_warnset.command(no_pm=True, pass_context=True)
-    @checks.admin_or_permissions(kick_members=True, manage_server=True)
+    @checks.mod_or_permissions(kick_members=True, manage_server=True)
     async def kick(self, ctx, *, msg=None):
         """Set the kick message.
 
@@ -88,7 +89,7 @@ class Warn:
         await self.bot.say("Kick message is now: \n{}".format(msg))
 
     @_warnset.command(no_pm=True, pass_context=True)
-    @checks.admin_or_permissions(kick_members=True, manage_server=True)
+    @checks.mod_or_permissions(kick_members=True, manage_server=True)
     async def reset(self, ctx):
         server = ctx.message.server
         author = ctx.message.author
@@ -106,7 +107,7 @@ class Warn:
             return
 
     @_warnset.command(no_pm=True, pass_context=True)
-    @checks.admin_or_permissions(kick_members=True, manage_server=True)
+    @checks.mod_or_permissions(kick_members=True, manage_server=True)
     async def message(self, ctx, *, msg = None):
         """Set the warning message
 
@@ -148,7 +149,7 @@ class Warn:
 
 
     @commands.command(no_pm=True, pass_context=True)
-    @checks.admin_or_permissions(kick_members=True)
+    @checks.mod_or_permissions(kick_members=True)
     async def warn(self, ctx, user : discord.Member, *, reason=None):
         """Warns the user - At 3 warnings the user gets kicked
 
@@ -162,8 +163,7 @@ class Warn:
         if can_kick:
             pass
         else:
-            await self.bot.say("Sorry, I can't warn this user.\n"
-                               "I am missing the `kick_members` permission")
+            await self.bot.say("I'm not allowed to do that.")
             return
 
         if server.id not in self.riceCog2:
@@ -263,7 +263,7 @@ class Warn:
             await self.bot.kick(user)
 
     @commands.command(no_pm=True, pass_context=True)
-    @checks.admin_or_permissions(kick_members=True)
+    @checks.mod_or_permissions(kick_members=True)
     async def clean(self, ctx, user : discord.Member):
         author = ctx.message.author
         server = author.server
