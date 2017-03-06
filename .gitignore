@@ -1,3 +1,9 @@
 
 
 .ftpconfig
+
+league_rewriting/league.py
+
+league/league.py
+
+league_rewriting/info.json
