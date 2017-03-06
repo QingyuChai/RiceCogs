@@ -12,18 +12,11 @@ Cogs:
   #Will say what the users says in a codeblock
 - Configuration
   #Utility cogs
-- Kill 
-  #Not so friendly cog
-- League 
+- League - currently disabled, rewriting everything and adding new features to make it useful
   #League of legends related cog
-- Rice
-  #Example of what an infobox could look like
 - Warn
   #Server management cog
   
-Requirements:
-- BeautifulSoup4
-  #Will be required for league cog later on due to future plans
 
 
 Find me on https://discord.gg/j29KuZK !
