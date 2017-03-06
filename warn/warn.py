@@ -136,7 +136,7 @@ class Warn:
                                "**You, user.mention, have received Warning warn.count. After warn.limit, you will be kicked.**\n\n"
 
                                "You can set it either for every server.\n"
-                               "To set the kick message, use *warnset kick*\n")
+                               "To set the kick message, use *warnset kick*\n```")
             return
 
 
@@ -217,7 +217,7 @@ class Warn:
             data.add_field(name="Warning", value=msg)
             if reason:
                 data.add_field(name="Reason", value=reason, inline=False)
-            data.set_footer(text="riceBot")
+            data.set_footer(text=self.bot.user.name)
             await self.bot.say(embed=data)
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
@@ -243,7 +243,7 @@ class Warn:
             data.add_field(name="Warning", value=msg)
             if reason:
                 data.add_field(name="Reason", value=reason, inline=False)
-            data.set_footer(text="riceBot")
+            data.set_footer(text=self.bot.user.name)
             await self.bot.say(embed=data)
 
             count = 0
@@ -292,7 +292,7 @@ class Warn:
             msg = str(user.mention) + ", your warnings have been cleared!"
             data = discord.Embed(colour=discord.Colour(value=colour))
             data.add_field(name="Warning", value=msg)
-            data.set_footer(text="riceBot")
+            data.set_footer(text=self.bot.user.name)
             await self.bot.say(embed=data)
 
             count = 0
