@@ -47,7 +47,7 @@ class Help:
             toggle = self.riceCog['toggle']
         if not command:
             msg = "**Command list:**"
-            color = 0x002B36
+            color = 0xffa500
 
             em=discord.Embed(description=msg, color=color)
 
