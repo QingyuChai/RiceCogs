@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "FwiedWice",
+    "INSTALL_MSG" : "You have successfully installed EmbedHelp. Use the command carefully. \n**Note**: This might *NOT* work if the help page is too long.",
+    "NAME" : "Help",
+    "SHORT" : "Custom embedded help command. Toggle between DM and no DM with [p]sethelp.",
+    "DESCRIPTION" : "Custom embedded help command. Very self explanatory. Might not work if the help message is too long."
+}
