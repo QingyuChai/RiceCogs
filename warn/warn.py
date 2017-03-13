@@ -2,7 +2,7 @@
 
 #Credits go to Twentysix26 for modlog
 #https://github.com/Twentysix26/Red-DiscordBot/blob/develop/cogs/mod.py
-
+#bot.change_nickname(user, display_name + "💩")
 import discord
 import os
 import shutil
@@ -61,6 +61,27 @@ class Warn:
             message += "Warn Limit   - {}\n"
             message += "```"
             await self.bot.say(message.format(msg, kick, _max))
+
+
+    @_warnset.command(no_pm=True, pass_context=True, manage_server=True)
+    async def poop(self, ctx):
+        """Enable/disable poop emojis per warning."""
+        server = ctx.message.server
+        true_msg = "Poop emojis per warning enabled."
+        false_msg = "Poop emojis per warning disabled."
+        if 'poop' not in self.riceCog2[server.id]:
+            self.riceCog2[server.id]['poop'] = True
+            msg = true_msg
+        elif self.riceCog2[server.id]['poop'] == True:
+            self.riceCog2[server.id]['poop'] = False
+            msg = false_msg
+        elif self.riceCog2[server.id]['poop'] == False:
+            self.riceCog2[server.id]['poop'] = True
+            msg = true_msg
+        else:
+            msg = "Error."
+        dataIO.save_json(self.warning_settings, self.riceCog2)
+        await self.bot.say(msg)
 
     @_warnset.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True, manage_server=True)
@@ -232,6 +253,13 @@ class Warn:
                                     action="Warning #{}".format(count),
                                     mod=author,
                                     user=user)
+            if 'poop' in self.riceCog2[server.id]:
+                if self.riceCog2[server.id]['poop'] == True:
+                    try:
+                        await self.bot.change_nickname(user, user.display_name + "💩")
+                    except discord.errors.Forbidden:
+                        await self.bot.say("No permission to change nicknames")
+
         else:
             msg = kick
             msg = msg.replace("user.mention", user.mention)
@@ -299,7 +327,10 @@ class Warn:
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
         else:
-            await self.bot.say("You don;t have any warnings to clear, " + str(user.mention) + "!")
+            await self.bot.say("You don't have any warnings to clear, " + str(user.mention) + "!")
+        if "💩" in user.display_name:
+            await self.bot.change_nickname(user, user.display_name.replace("💩", ""))
+            await self.bot.say("Poop was cleared.")
 
 
 
