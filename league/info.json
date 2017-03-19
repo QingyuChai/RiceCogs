@@ -1,8 +1,8 @@
 
 {
     "AUTHOR" : "FwiedWice",
-    "INSTALL_MSG" : "You have successfully installed league. Use the command carefully.",
+    "INSTALL_MSG" : "You have successfully installed league. Use the commands carefully.\n**Do not spam the commands.** Doing so would abuse the riot api.\nGet yourself API keys for both championgg and riotgames.\nhttps://developer.riotgames.com/terms-and-conditions.html\nhttp://api.champion.gg/\nSelect those api keys with [p]leagueset",
     "NAME" : "league",
-    "SHORT" : "champion.gg and lolwiki links for champions, also can view OPGG links for each region and summoner",
-    "DESCRIPTION" : "League of legends related cogs that make it easier to find champion abilities, winrates and summoner stats."
+    "SHORT" : "Summoner, champion and current match info for League of Legends",
+    "DESCRIPTION" : "Champion info, with build path and winrate, summoner info, with winrate and mains, and current match info, with ranks, winrates etc."
 }
