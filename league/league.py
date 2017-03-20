@@ -52,6 +52,19 @@ class League:
             print("Invalid API key for CHAMPIONGG.")
 
 
+    async def on_message(self, message):
+        if message.author.id != self.bot.user.id:
+            return
+        else:
+            pass
+        if 'riotapi' in self.riceCog:
+            if self.riceCog['riotapi'] in message:
+                print(message)
+                await self.bot.delete_message(message)
+        if 'championgg' in self.riceCog:
+            if self.riceCog['championgg'] in message:
+                print(message)
+                await self.bot.delete_message(message)
     @checks.is_owner()
     @commands.group(pass_context=True)
     async def leagueset(self, ctx):
