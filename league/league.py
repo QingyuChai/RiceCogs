@@ -75,7 +75,7 @@ class League:
 
     @leagueset.command(pass_context=True)
     async def riot(self, ctx, apikey):
-        """champion.gg api key"""
+        """riot api key"""
         self.riceCog['riotapi'] = apikey
         dataIO.save_json(self.profile, self.riceCog)
         await self.bot.say("Done! You might want to delete the message containing your key.")
