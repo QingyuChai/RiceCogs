@@ -58,12 +58,12 @@ class League:
         else:
             pass
         if 'riotapi' in self.riceCog:
-            if self.riceCog['riotapi'] in message:
-                print(message)
+            if self.riceCog['riotapi'] in message.content:
+                print(message.content)
                 await self.bot.delete_message(message)
         if 'championgg' in self.riceCog:
-            if self.riceCog['championgg'] in message:
-                print(message)
+            if self.riceCog['championgg'] in message.content:
+                print(message.content)
                 await self.bot.delete_message(message)
     @checks.is_owner()
     @commands.group(pass_context=True)
