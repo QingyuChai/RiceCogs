@@ -75,7 +75,7 @@ class League:
 
     @leagueset.command(pass_context=True)
     async def riot(self, ctx, apikey):
-        """champion.gg api key"""
+        """riot api key"""
         self.riceCog['riotapi'] = apikey
         dataIO.save_json(self.profile, self.riceCog)
         await self.bot.say("Done! You might want to delete the message containing your key.")
@@ -85,6 +85,7 @@ class League:
         try:
             riot_apikey = self.riceCog['riotapi']
             riotapi.set_api_key(riot_apikey)
+            riotapi.set_region('eune')
             riotapi.get_summoner_by_name("FwiedWice")
         except:
             await self.bot.say(self.api_error_riot.format(ctx.prefix))
@@ -316,6 +317,7 @@ class League:
         try:
             riot_apikey = self.riceCog['riotapi']
             riotapi.set_api_key(riot_apikey)
+            riotapi.set_region('eune')
             riotapi.get_summoner_by_name("FwiedWice")
         except:
             await self.bot.say(self.api_error_riot.format(ctx.prefix))
@@ -399,6 +401,7 @@ class League:
         try:
             riot_apikey = self.riceCog['riotapi']
             riotapi.set_api_key(riot_apikey)
+            riotapi.set_region('eune')
             riotapi.get_summoner_by_name("FwiedWice")
         except:
             await self.bot.say(self.api_error_riot.format(ctx.prefix))
