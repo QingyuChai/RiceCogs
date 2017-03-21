@@ -243,16 +243,22 @@ class Warn:
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
             if reason:
-                await self._cog.new_case(server,
-                                    action="Warning #{}".format(count),
-                                    mod=author,
-                                    user=user,
-                                    reason=reason)
+                try:
+                    await self._cog.new_case(server,
+                                        action="Warning #{}".format(count),
+                                        mod=author,
+                                        user=user,
+                                        reason=reason)
+                except Exception as e:
+                    print(e)
             else:
-                await self._cog.new_case(server,
-                                    action="Warning #{}".format(count),
-                                    mod=author,
-                                    user=user)
+                try:
+                    await self._cog.new_case(server,
+                                        action="Warning #{}".format(count),
+                                        mod=author,
+                                        user=user)
+                except Exception as e:
+                    print(e)
             if 'poop' in self.riceCog2[server.id]:
                 if self.riceCog2[server.id]['poop'] == True:
                     try:
