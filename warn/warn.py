@@ -242,9 +242,19 @@ class Warn:
             await self.bot.say(embed=data)
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
+            if 'poop' in self.riceCog2[server.id]:
+                if self.riceCog2[server.id]['poop'] == True:
+                    try:
+                        await self.bot.change_nickname(user, user.display_name + "💩")
+                    except discord.errors.Forbidden:
+                        await self.bot.say("No permission to change nicknames")
+
             if reason:
                 try:
-                    await self._cog.new_case(server,
+                    _cog = self.bot.get_cog("Mod")
+                    if _cog == None:
+                        return
+                    await _cog.new_case(server,
                                         action="Warning #{}".format(count),
                                         mod=author,
                                         user=user,
@@ -253,18 +263,15 @@ class Warn:
                     print(e)
             else:
                 try:
+                    _cog = self.bot.get_cog("Mod")
+                    if _cog == None:
+                        return
                     await self._cog.new_case(server,
                                         action="Warning #{}".format(count),
                                         mod=author,
                                         user=user)
                 except Exception as e:
                     print(e)
-            if 'poop' in self.riceCog2[server.id]:
-                if self.riceCog2[server.id]['poop'] == True:
-                    try:
-                        await self.bot.change_nickname(user, user.display_name + "💩")
-                    except discord.errors.Forbidden:
-                        await self.bot.say("No permission to change nicknames")
 
         else:
             msg = kick
