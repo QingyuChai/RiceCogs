@@ -205,7 +205,9 @@ class Warn:
             _max = default_max
 
         #checks if the user is in the file
-
+        if server.id not in self.riceCog2:
+            self.riceCog2[server.id] = {}
+            dataIO.save_json(self.warning_settings, self.riceCog2)
         if server.id not in self.riceCog:
             self.riceCog[server.id] = {}
             dataIO.save_json(self.profile, self.riceCog)
