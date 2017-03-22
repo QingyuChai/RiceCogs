@@ -244,6 +244,35 @@ class Warn:
             await self.bot.say(embed=data)
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
+        else:
+            msg = kick
+            msg = msg.replace("user.mention", user.mention)
+            msg = msg.replace("user.name", user.name)
+            msg = msg.replace("user.id", user.id)
+            msg = msg.replace("warn.count", str(count))
+            msg = msg.replace("warn.limit", str(_max))
+            data = discord.Embed(colour=discord.Colour(value=colour))
+            data.add_field(name="Warning", value=msg)
+            if reason:
+                data.add_field(name="Reason", value=reason, inline=False)
+            data.set_footer(text=self.bot.user.name)
+            await self.bot.say(embed=data)
+
+            count = 0
+            self.riceCog[server.id][user.id].update({"Count" : count})
+            dataIO.save_json(self.profile, self.riceCog)
+            if reason and _cog:
+                await self._cog.new_case(server,
+                                    action="Kicked after {} warnings.".format(_max),
+                                    mod=author,
+                                    user=user,
+                                    reason=reason)
+            elif _cog:
+                await self._cog.new_case(server,
+                                    action="Kicked after {} warnings.".format(_max),
+                                    mod=author,
+                                    user=user)
+            await self.bot.kick(user)
         try:
             _cog = self.bot.get_cog("Mod")
             if _cog == None:
@@ -280,36 +309,6 @@ class Warn:
                                         user=user)
                 except Exception as e:
                     print(e)
-
-        else:
-            msg = kick
-            msg = msg.replace("user.mention", user.mention)
-            msg = msg.replace("user.name", user.name)
-            msg = msg.replace("user.id", user.id)
-            msg = msg.replace("warn.count", str(count))
-            msg = msg.replace("warn.limit", str(_max))
-            data = discord.Embed(colour=discord.Colour(value=colour))
-            data.add_field(name="Warning", value=msg)
-            if reason:
-                data.add_field(name="Reason", value=reason, inline=False)
-            data.set_footer(text=self.bot.user.name)
-            await self.bot.say(embed=data)
-
-            count = 0
-            self.riceCog[server.id][user.id].update({"Count" : count})
-            dataIO.save_json(self.profile, self.riceCog)
-            if reason and _cog:
-                await self._cog.new_case(server,
-                                    action="Kicked after {} warnings.".format(_max),
-                                    mod=author,
-                                    user=user,
-                                    reason=reason)
-            elif _cog:
-                await self._cog.new_case(server,
-                                    action="Kicked after {} warnings.".format(_max),
-                                    mod=author,
-                                    user=user)
-            await self.bot.kick(user)
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
