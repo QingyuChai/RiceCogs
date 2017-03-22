@@ -257,7 +257,7 @@ class Warn:
                 except discord.errors.Forbidden:
                     await self.bot.say("No permission to change nicknames")
 
-            if reason
+            if reason:
                 try:
                     _cog = self.bot.get_cog("Mod")
                     if not _cog == None:
