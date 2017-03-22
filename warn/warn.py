@@ -227,7 +227,12 @@ class Warn:
             count = self.riceCog[server.id][user.id]["Count"]
         else:
             count = 0
-
+        try:
+            _cog = self.bot.get_cog("Mod")
+            if _cog == None:
+                _cog = False
+        except:
+            _cog = False
         #checks how many warnings the user has
         if count != _max - 1:
             count += 1
@@ -273,12 +278,6 @@ class Warn:
                                     mod=author,
                                     user=user)
             await self.bot.kick(user)
-        try:
-            _cog = self.bot.get_cog("Mod")
-            if _cog == None:
-                _cog = False
-        except:
-            _cog = False
         if 'poop' in self.riceCog2[server.id]:
             if self.riceCog2[server.id]['poop'] == True:
                 try:
