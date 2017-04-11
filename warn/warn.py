@@ -32,7 +32,7 @@ class Warn:
         self.warning_settings = "data/account/warning_settings.json"
         self.riceCog2 = dataIO.load_json(self.warning_settings)
         try:
-            self._cog = self.bot.get_cog("Mod")
+            self.bot.get_cog("Mod")
         except:
             print("You need the mod cog to properly run warn")
 
@@ -227,12 +227,7 @@ class Warn:
             count = self.riceCog[server.id][user.id]["Count"]
         else:
             count = 0
-        try:
-            _cog = self.bot.get_cog("Mod")
-            if _cog == None:
-                _cog = False
-        except:
-            _cog = False
+        cog = self.bot.get_cog('Mod')
         #checks how many warnings the user has
         if count != _max - 1:
             count += 1
@@ -266,14 +261,14 @@ class Warn:
             count = 0
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile, self.riceCog)
-            if reason and _cog:
-                await self._cog.new_case(server,
+            if reason:
+                await cog.new_case(server,
                                     action="Kicked after {} warnings.".format(_max),
                                     mod=author,
                                     user=user,
                                     reason=reason)
-            elif _cog:
-                await self._cog.new_case(server,
+            else:
+                await cog.new_case(server,
                                     action="Kicked after {} warnings.".format(_max),
                                     mod=author,
                                     user=user)
@@ -287,10 +282,7 @@ class Warn:
 
             if reason:
                 try:
-                    _cog = self.bot.get_cog("Mod")
-                    if not _cog == None:
-                        return
-                    await _cog.new_case(server,
+                    await cog.new_case(server,
                                         action="Warning #{}".format(count),
                                         mod=author,
                                         user=user,
@@ -299,10 +291,8 @@ class Warn:
                     print(e)
             else:
                 try:
-                    _cog = self.bot.get_cog("Mod")
-                    if _cog == None:
-                        return
-                    await self._cog.new_case(server,
+
+                    await self.cog.new_case(server,
                                         action="Warning #{}".format(count),
                                         mod=author,
                                         user=user)
