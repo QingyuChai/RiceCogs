@@ -1,5 +1,8 @@
 # RiceCogs
 
+
+# NOTE: I will be closing this repo temporarily until I have more time to work on it. Sorry for the inconvenience.
+
 Red - Support Server
 - https://discordapp.com/invite/red
 
