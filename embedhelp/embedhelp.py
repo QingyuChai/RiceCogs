@@ -49,10 +49,7 @@ class Help:
             msg = "**Command list:**"
             color = 0xffa500
 
-            em=discord.Embed(description=msg, color=color)
 
-        #await self.bot.say("Hello.")
-        #await self.bot.say(coms)
             final_coms = {}
             com_groups = []
             for com in self.bot.commands:
@@ -74,61 +71,68 @@ class Help:
                     if com in self.bot.commands[com].aliases:
                         continue
                     if com_group == self.bot.commands[com].module.__name__:
-                    #print("PLS WURK")
-                        #if self.bot.commands[com].aliases == alias:
                         commands.append(com)
                 final_coms[com_group] = commands
 
-            #print(commands)
-        #print(final_coms)
+            to_send = []
 
             final_coms = collections.OrderedDict(sorted(final_coms.items()))
-            #print(final_coms)
+            field_count = 0
+            page = 0
+            counter = 0
 
             for group in final_coms:
-                #width = len(max(words, key=len))
+                counter += 1
+                if field_count == 0:
+                    page += 1
+                    title = "**Command list,** page {}".format(page)
+                    em=discord.Embed(description=title, color=color)
+
+                field_count += 1
+                is_last = counter == len(final_coms)
                 msg = ""
                 final_coms[group].sort()
                 count = 0
                 for com in final_coms[group]:
-                #drugs = self.bot.commands[com].help
-                #if not drugs:
-                    #drugs = "No description available."
-                #msg += '```md\n'
                     if count == 0:
                         msg += '`{}`'.format(com)
                     else:
                         msg += '~`{}`'.format(com)
                     count += 1
-                #msg += '```'
-                #msg += '    {}\n'.format(str(drugs))
+
                 cog_name = group.replace("cogs.", "").title()
                 cog =  "```\n"
                 cog += cog_name
                 cog += "\n```"
                 em.add_field(name=cog, value=msg, inline=False)
 
+                if field_count == 15 or is_last:
+                    to_send.append(em)
+                    field_count = 0
+
 
             if toggle == "dm":
                 await self.bot.say("Hey there, {}! I sent you a list of commands"
                                    " through DM.".format(ctx.message.author.mention))
-                await self.bot.send_message(ctx.message.author, embed=em)
+                for em in to_send:
+                    await self.bot.send_message(ctx.message.author, embed=em)
                 await self.bot.send_message(ctx.message.author,
                                         "An instance of Red - DiscordBot, made "
                                         "by Twentysix26 and improved by many.")
             elif toggle == 'no_dm':
-                await self.bot.say(embed=em)
+                for em in to_send:
+                    await self.bot.say(embed=em)
                 await self.bot.say("An instance of Red - DiscordBot, "
                                    "made by Twentysix26 and improved by many.")
 
         else:
             msg = "**Command Help:**"
-            color = 0x002B36
+            color = 0xffa500
 
             em=discord.Embed(description=msg, color=color)
             try:
                 commie =  "```\n"
-                commie += command
+                commie += command + " " + " ".join(["[" + com + "]" for com in self.bot.commands[command].clean_params])
                 commie += "\n```"
                 info = self.bot.commands[command].help
                 em.add_field(name=commie, value=info, inline=False)
