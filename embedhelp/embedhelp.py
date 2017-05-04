@@ -54,13 +54,14 @@ class Help:
             com_groups = []
             for com in self.bot.commands:
                 try:
+                    if not self.bot.commands[com].can_run(ctx):
+                        continue
                     if self.bot.commands[com].module.__name__ not in com_groups:
                         com_groups.append(self.bot.commands[com].module.__name__)
                     else:
                         continue
                 except Exception as e:
                         print(e)
-                        print(datetime.datetime.now())
                         continue
             com_groups.sort()
             alias = []
@@ -68,6 +69,8 @@ class Help:
             for com_group in com_groups:
                 commands = []
                 for com in self.bot.commands:
+                    if not self.bot.commands[com].can_run(ctx):
+                        continue
                     if com in self.bot.commands[com].aliases:
                         continue
                     if com_group == self.bot.commands[com].module.__name__:
@@ -131,6 +134,9 @@ class Help:
 
             em=discord.Embed(description=msg, color=color)
             try:
+                if not self.bot.commands[command].can_run(ctx):
+                    await self.bot.say("Might be lacking perms for this command.")
+                    return
                 commie =  "```\n"
                 commie += command + " " + " ".join(["[" + com + "]" for com in self.bot.commands[command].clean_params])
                 commie += "\n```"
