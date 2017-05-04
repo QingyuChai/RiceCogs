@@ -17,7 +17,6 @@ from discord.ext import commands
 from enum import Enum
 from __main__ import send_cmd_help
 
-colour = '099999'
 default_warn = ("user.mention, you have received your "
                 "warning #warn.count! At warn.limit warnings you "
                 "will be kicked!")
@@ -31,10 +30,9 @@ class Warn:
         self.riceCog = dataIO.load_json(self.profile)
         self.warning_settings = "data/account/warning_settings.json"
         self.riceCog2 = dataIO.load_json(self.warning_settings)
-        try:
-            self.bot.get_cog("Mod")
-        except:
-            print("You need the mod cog to properly run warn")
+        if not self.bot.get_cog("Mod"):
+            print("You need the Mod cog to run this cog effectively!")
+
 
     @commands.group(no_pm=True, pass_context=True, name='warnset')
     async def _warnset(self, ctx):
@@ -167,6 +165,13 @@ class Warn:
         dataIO.save_json(self.warning_settings, self.riceCog2)
         await self.bot.say("Warn message is now: \n{}".format(msg))
 
+    async def filter_message(self, msg, user, count, _max):
+        msg = msg.replace("user.mention", user.mention)
+        msg = msg.replace("user.name", user.name)
+        msg = msg.replace("user.id", user.id)
+        msg = msg.replace("warn.count", str(count))
+        msg = msg.replace("warn.limit", str(_max))
+        return msg
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
@@ -179,6 +184,7 @@ class Warn:
         channel = ctx.message.channel
 
         can_kick = channel.permissions_for(server.me).kick_members
+        can_role = channel.permissions_for(server.me).manage_roles
 
         if can_kick:
             pass
@@ -204,22 +210,28 @@ class Warn:
         except:
             _max = default_max
 
+        colour = server.me.colour
+
         #checks if the user is in the file
         if server.id not in self.riceCog2:
             self.riceCog2[server.id] = {}
-            dataIO.save_json(self.warning_settings, self.riceCog2)
+            dataIO.save_json(self.warning_settings,
+                             self.riceCog2)
         if server.id not in self.riceCog:
             self.riceCog[server.id] = {}
-            dataIO.save_json(self.profile, self.riceCog)
+            dataIO.save_json(self.profile,
+                             self.riceCog)
             if user.id not in self.riceCog[server.id]:
                 self.riceCog[server.id][user.id] = {}
-                dataIO.save_json(self.profile, self.riceCog)
+                dataIO.save_json(self.profile,
+                                 self.riceCog)
             else:
                 pass
         else:
             if user.id not in self.riceCog[server.id]:
                 self.riceCog[server.id][user.id] = {}
-                dataIO.save_json(self.profile, self.riceCog)
+                dataIO.save_json(self.profile,
+                                 self.riceCog)
             else:
                 pass
 
@@ -227,83 +239,95 @@ class Warn:
             count = self.riceCog[server.id][user.id]["Count"]
         else:
             count = 0
+
         cog = self.bot.get_cog('Mod')
+
         #checks how many warnings the user has
         if count != _max - 1:
             count += 1
-            msg = msg.replace("user.mention", user.mention)
-            msg = msg.replace("user.name", user.name)
-            msg = msg.replace("user.id", user.id)
-            msg = msg.replace("warn.count", str(count))
-            msg = msg.replace("warn.limit", str(_max))
-            data = discord.Embed(colour=discord.Colour(value=colour))
-            data.add_field(name="Warning", value=msg)
+            msg = await self.filter_message(msg=msg,
+                                            user=user,
+                                            count=count,
+                                            _max=_max)
+            data = discord.Embed(colour=colour)
+            data.add_field(name="Warning",
+                           value=msg)
             if reason:
-                data.add_field(name="Reason", value=reason, inline=False)
+                data.add_field(name="Reason",
+                               value=reason,
+                               inline=False)
             data.set_footer(text=self.bot.user.name)
             await self.bot.say(embed=data)
             self.riceCog[server.id][user.id].update({"Count" : count})
-            dataIO.save_json(self.profile, self.riceCog)
+            dataIO.save_json(self.profile,
+                             self.riceCog)
+            log = None
         else:
             msg = kick
-            msg = msg.replace("user.mention", user.mention)
-            msg = msg.replace("user.name", user.name)
-            msg = msg.replace("user.id", user.id)
-            msg = msg.replace("warn.count", str(count))
-            msg = msg.replace("warn.limit", str(_max))
-            data = discord.Embed(colour=discord.Colour(value=colour))
-            data.add_field(name="Warning", value=msg)
+            msg = await self.filter_message(msg=msg,
+                                            user=user,
+                                            count=count,
+                                            _max=_max)
+            data = discord.Embed(colour=colour)
+            data.add_field(name="Warning",
+                           value=msg)
             if reason:
-                data.add_field(name="Reason", value=reason, inline=False)
+                data.add_field(name="Reason",
+                               value=reason,
+                               inline=False)
             data.set_footer(text=self.bot.user.name)
             await self.bot.say(embed=data)
 
             count = 0
             self.riceCog[server.id][user.id].update({"Count" : count})
-            dataIO.save_json(self.profile, self.riceCog)
-            if reason:
-                await cog.new_case(server,
-                                    action="Kicked after {} warnings.".format(_max),
-                                    mod=author,
-                                    user=user,
-                                    reason=reason)
-            else:
-                await cog.new_case(server,
-                                    action="Kicked after {} warnings.".format(_max),
-                                    mod=author,
-                                    user=user)
-            await self.bot.kick(user)
-        if 'poop' in self.riceCog2[server.id]:
+            dataIO.save_json(self.profile,
+                             self.riceCog)
+            log = "KICK"
+
+        if 'poop' in self.riceCog2[server.id] and can_role:
             if self.riceCog2[server.id]['poop'] == True:
+                poops = count * "💩"
+                role_name = "Warning {}".format(poops)
+                is_there = False
+                colour = 0xbc7642
+                for role in server.roles:
+                    if role.name == role_name:
+                        poop_role = role
+                        is_there = True
+                if not is_there:
+                    poop_role = await self.bot.create_role(server)
+                    await self.bot.edit_role(role=poop_role,
+                                             name=role_name,
+                                             server=server)
                 try:
-                    await self.bot.change_nickname(user, user.display_name + "💩")
+                    await self.bot.add_roles(user,
+                                             poop_role)
                 except discord.errors.Forbidden:
-                    await self.bot.say("No permission to change nicknames")
+                    await self.bot.say("No permission to add roles")
 
-            if reason:
-                try:
-                    await cog.new_case(server,
-                                        action="Warning #{}".format(count),
-                                        mod=author,
-                                        user=user,
-                                        reason=reason)
-                except Exception as e:
-                    print(e)
-            else:
-                try:
+        if (reason and log):
+            await cog.new_case(server=server,
+                               action=log,
+                               mod=author,
+                               user=user,
+                               reason=reason)
+            await self.bot.kick(user)
+        elif log:
+            await cog.new_case(server=server,
+                               action=log,
+                               user=user,
+                               mod=author,
+                               reason="No reason provided yet.")
+            await self.bot.kick(user)
 
-                    await self.cog.new_case(server,
-                                        action="Warning #{}".format(count),
-                                        mod=author,
-                                        user=user)
-                except Exception as e:
-                    print(e)
+
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
     async def clean(self, ctx, user : discord.Member):
         author = ctx.message.author
         server = author.server
+        colour = server.me.colour
 
         if server.id not in self.riceCog:
             self.riceCog[server.id] = {}
@@ -327,7 +351,7 @@ class Warn:
 
         if count != 0:
             msg = str(user.mention) + ", your warnings have been cleared!"
-            data = discord.Embed(colour=discord.Colour(value=colour))
+            data = discord.Embed(colour=colour)
             data.add_field(name="Warning", value=msg)
             data.set_footer(text=self.bot.user.name)
             await self.bot.say(embed=data)
@@ -337,9 +361,7 @@ class Warn:
             dataIO.save_json(self.profile, self.riceCog)
         else:
             await self.bot.say("You don't have any warnings to clear, " + str(user.mention) + "!")
-        if "💩" in user.display_name:
-            await self.bot.change_nickname(user, user.display_name.replace("💩", ""))
-            await self.bot.say("Poop was cleared.")
+            #clear role
 
 
 
