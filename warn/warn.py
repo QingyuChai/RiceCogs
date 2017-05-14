@@ -60,6 +60,21 @@ class Warn:
             message += "```"
             await self.bot.say(message.format(msg, kick, _max))
 
+    @_warnset.command(no_pm=True, pass_context=True, manage_server=True)
+    async def pm(self, ctx):
+        """Enable/disable PM warn"""
+        server = ctx.message.server
+        if 'pm_warn' not in self.riceCog[server.id]:
+            self.riceCog[server.id]['pm_warn'] = False
+
+        p = self.riceCog[server.id]['pm_warn']
+        if p:
+            self.riceCog[server.id]['pm_warn'] = False
+            await self.bot.say("Warnings are now in the channel.")
+        elif not p:
+            self.riceCog[server.id]['pm_warn'] = True
+            await self.bot.say("Warnings are now in DM.")
+
 
     @_warnset.command(no_pm=True, pass_context=True, manage_server=True)
     async def poop(self, ctx):
@@ -197,6 +212,12 @@ class Warn:
             msg = default_warn
             kick = default_kick
             _max = default_max
+
+        if 'pm_warn' not in self.riceCog[server.id]:
+            self.riceCog[server.id]['pm_warn'] = False
+
+        p = self.riceCog[server.id]['pm_warn']
+
         try:
             msg = self.riceCog2[server.id]["warn_message"]
         except:
@@ -257,7 +278,10 @@ class Warn:
                                value=reason,
                                inline=False)
             data.set_footer(text=self.bot.user.name)
-            await self.bot.say(embed=data)
+            if p:
+                await self.bot.send_message(user, embed=data)
+            elif not p:
+                await self.bot.say(embed=data)
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile,
                              self.riceCog)
@@ -276,8 +300,10 @@ class Warn:
                                value=reason,
                                inline=False)
             data.set_footer(text=self.bot.user.name)
-            await self.bot.say(embed=data)
-
+            if p:
+                await self.bot.send_message(user, embed=data)
+            elif not p:
+                await self.bot.say(embed=data)
             count = 0
             self.riceCog[server.id][user.id].update({"Count" : count})
             dataIO.save_json(self.profile,
