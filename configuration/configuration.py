@@ -65,7 +65,7 @@ class Config:
         msg += message
         msg += "\n```"
 
-        channel = discord.utils.get(bot.get_all_channels(),
+        channel = discord.utils.get(self.bot.get_all_channels(),
                                     id=channel_id)
 
         try:
