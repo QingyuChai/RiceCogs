@@ -37,6 +37,7 @@ class Waitroom:
         count = 0
         for role in server.roles:
             if role.name.lower() == default_role.lower():
+                default_role = role
                 break
             else:
                 count += 1
@@ -45,10 +46,10 @@ class Waitroom:
             await self.bot.say("Role does not exist on this server. Please try again.")
             return
         if server.id not in self.roleset:
-            self.roleset[server.id] = default_role
+            self.roleset[server.id] = default_role.id
             dataIO.save_json(self.defaultrole, self.roleset)
         else:
-            self.roleset[server.id] = default_role
+            self.roleset[server.id] = default_role.id
             dataIO.save_json(self.defaultrole, self.roleset)
         await self.bot.say("Succesfully changed the default *role* to {}!".format(default_role))
 
@@ -66,7 +67,7 @@ class Waitroom:
             if msg.content.lower().strip() == "agreed":
                 try:
                     for role in server.roles:
-                        if role.name.lower() == default_role.lower():
+                        if role.id == default_role:
                             userrole = role
                             break
                     await self.bot.add_roles(author, userrole)
