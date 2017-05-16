@@ -172,7 +172,7 @@ class Cypher:
 
         tool = Code(chars)
 
-        result = await tool.code(how_much, 'en', message)
+        result = await tool.code(how_much, 'de', message)
         await self.bot.say("```You're decoded message is:\n\n{}```".format(result))
 
 def check_folder():
