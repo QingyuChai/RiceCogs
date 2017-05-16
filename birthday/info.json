@@ -1,7 +1,6 @@
 {
     "AUTHOR" : "FwiedWice",
-    "INSTALL_MSG" : "You have successfully installed birthday. Use the command carefully.",
+    "INSTALL_MSG" : "You have successfully installed birthday. Use the commands carefully.",
     "NAME" : "Birthday",
     "SHORT" : "Birthday related commands",
-    "DESCRIPTION" : "[p]birthday set and [p]birthday show, will implement features in the future where it will congratulate the user or assign a birthday role if it has permissions"
-}
+    "DESCRIPTION" : "[p]birthday set and [p]birthday show. To get the loop running where it private messages people who have their birthday today, restart the bot."
