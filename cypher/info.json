@@ -1,0 +1,7 @@
+{
+    "AUTHOR" : "FwiedWice",
+    "INSTALL_MSG" : "You have successfully installed cypher. Use the command carefully.",
+    "NAME" : "Cypher",
+    "SHORT" : "Encode/decode your messages",
+    "DESCRIPTION" : "You can now decode your messages using the Caesar Shift! You can set your own character sets, and by how many ahcaracters you shift."
+}
