@@ -5,6 +5,7 @@ from .utils.dataIO import fileIO, dataIO
 from cogs.utils import checks
 from discord.ext import commands
 from cogs.utils.chat_formatting import pagify
+from discord import Object
 
 
 class Config:
@@ -56,34 +57,29 @@ class Config:
 
     @commands.command()
     @checks.is_owner()
-    async def shout(self, server_id, channel_id, *, message):
+    async def shout(self, channel_id, *, message):
         """
-        Shouts a message to the main channel of a certain server"""
+        Shouts a message to another channel
+        """
         msg = "```asciidoc\n"
         msg += "Announcement :: Information\n"
         msg += message
         msg += "\n```"
 
-        if channel_id == "main":
-            channel_id = None
-            channel = None
-        else:
-            channel = discord.utils.get(self.bot.get_all_channels(), id=channel_id)
+        channel = Object(channel_id)
 
-        for server in self.bot.servers:
-            if server.id == server_id:
-                if channel in server.channels:
-                    try:
-                        await self.bot.send_message(channel, msg)
-                        await self.bot.say("'{}' has been sent to {} in {}.".format(message, channel.name, channel.server))
-                    except discord.errors.Forbidden:
-                        await self.bot.say("I'm not allowed to do that.")
-                else:
-                    try:
-                        await self.bot.send_message(server, msg)
-                        await self.bot.say("Couldn't find channel with id {}, so I just sent the message to the main channel instead.".format(channel_id))
-                    except discord.errors.Forbidden:
-                        await self.bot.say("I'm not allowed to do that.")
+        try:
+            await self.bot.send_message(channel, msg)
+            await self.bot.say("'{}' has been sent "
+                               "to {} in {}.".format(message,
+                                                     channel.name,
+                                                     channel.server))
+        except discord.errors.Forbidden:
+            await self.bot.say("I do not have permissions for that channel.")
+        except Exception as e:
+            print(e)
+            await self.bot.say("The channel ID was probably invalid. Check "
+                               "your console for more information.")
 
     @commands.command()
     @checks.is_owner()
@@ -202,13 +198,6 @@ class Config:
         except:
             pass
         await self.bot.shutdown()
-
-    @commands.command()
-    @checks.is_owner()
-    async def speak(self, *, content):
-        """Says something"""
-        await self.bot.say(content)
-
 
 def check_folder():
     if not os.path.exists("data/servers"):
