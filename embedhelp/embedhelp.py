@@ -20,15 +20,18 @@ class Help:
         no_dm_msg = "The help message will now be send into the channel."
         if 'toggle' not in self.riceCog:
             self.riceCog['toggle'] = "no_dm"
-            dataIO.save_json(self.profile, self.riceCog)
+            dataIO.save_json(self.profile,
+                             self.riceCog)
             msg = no_dm_msg
         elif self.riceCog['toggle'] == "dm":
             self.riceCog['toggle'] = "no_dm"
-            dataIO.save_json(self.profile, self.riceCog)
+            dataIO.save_json(self.profile,
+                             self.riceCog)
             msg = no_dm_msg
         elif self.riceCog['toggle'] == "no_dm":
             self.riceCog['toggle'] = "dm"
-            dataIO.save_json(self.profile, self.riceCog)
+            dataIO.save_json(self.profile,
+                             self.riceCog)
             msg = dm_msg
         if msg:
             await self.bot.say(msg)
@@ -37,9 +40,12 @@ class Help:
 
     @commands.command(name='help', pass_context=True)
     async def _help(self, ctx, command = None):
+        """Embedded help command"""
+        author = ctx.message.author
         if 'toggle' not in self.riceCog:
             self.riceCog['toggle'] = "dm"
-            dataIO.save_json(self.profile, self.riceCog)
+            dataIO.save_json(self.profile,
+                             self.riceCog)
             await self.bot.say("Help message is set to DM by default. use "
                                "**{}sethelp** to change it!".format(ctx.prefix))
             toggle = self.riceCog['toggle']
@@ -89,7 +95,8 @@ class Help:
                 if field_count == 0:
                     page += 1
                     title = "**Command list,** page {}".format(page)
-                    em=discord.Embed(description=title, color=color)
+                    em=discord.Embed(description=title,
+                                     color=color)
 
                 field_count += 1
                 is_last = counter == len(final_coms)
@@ -107,7 +114,9 @@ class Help:
                 cog =  "```\n"
                 cog += cog_name
                 cog += "\n```"
-                em.add_field(name=cog, value=msg, inline=False)
+                em.add_field(name=cog,
+                             value=msg,
+                             inline=False)
 
                 if field_count == 15 or is_last:
                     to_send.append(em)
@@ -115,10 +124,11 @@ class Help:
 
 
             if toggle == "dm":
-                await self.bot.say("Hey there, {}! I sent you a list of commands"
-                                   " through DM.".format(ctx.message.author.mention))
+                await self.bot.say("Hey there, {}! I sent you a list of "
+                                   "commands through DM.".format(author.mention))
                 for em in to_send:
-                    await self.bot.send_message(ctx.message.author, embed=em)
+                    await self.bot.send_message(ctx.message.author,
+                                                embed=em)
                 await self.bot.send_message(ctx.message.author,
                                         "An instance of Red - DiscordBot, made "
                                         "by Twentysix26 and improved by many.")
@@ -132,16 +142,22 @@ class Help:
             msg = "**Command Help:**"
             color = 0xffa500
 
-            em=discord.Embed(description=msg, color=color)
+            em=discord.Embed(description=msg,
+                             color=color)
             try:
                 if not self.bot.commands[command].can_run(ctx):
-                    await self.bot.say("Might be lacking perms for this command.")
+                    await self.bot.say("Might be lacking perms for this "
+                                       "command.")
                     return
                 commie =  "```\n"
-                commie += command + " " + " ".join(["[" + com + "]" for com in self.bot.commands[command].clean_params])
+                commie += command + " " + " ".join(["[" + com + "]" for com in \
+                                                    self.bot.commands[command].\
+                                                    clean_params])
                 commie += "\n```"
                 info = self.bot.commands[command].help
-                em.add_field(name=commie, value=info, inline=False)
+                em.add_field(name=commie,
+                             value=info,
+                             inline=False)
                 await self.bot.say(embed=em)
             except Exception as e:
                 print(e)
@@ -157,7 +173,8 @@ def check_file():
     f = "data/help/toggle.json"
     if not dataIO.is_valid_json(f):
         print("Creating data/help/toggle.json")
-        dataIO.save_json(f, data)
+        dataIO.save_json(f,
+                         data)
 
 def setup(bot):
     check_folder()

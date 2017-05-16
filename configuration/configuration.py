@@ -5,7 +5,6 @@ from .utils.dataIO import fileIO, dataIO
 from cogs.utils import checks
 from discord.ext import commands
 from cogs.utils.chat_formatting import pagify
-from discord import Object
 
 
 class Config:
@@ -66,10 +65,12 @@ class Config:
         msg += message
         msg += "\n```"
 
-        channel = Object(channel_id)
+        channel = discord.utils.get(bot.get_all_channels(),
+                                    id=channel_id)
 
         try:
-            await self.bot.send_message(channel, msg)
+            await self.bot.send_message(channel,
+                                        msg)
             await self.bot.say("'{}' has been sent "
                                "to {} in {}.".format(message,
                                                      channel.name,
@@ -93,9 +94,12 @@ class Config:
         for channel in server.channels:
             if channel.type == discord.ChannelType.text:
                 channelname = channel.name.replace("_", "-")
-                msg += "{} :: {}\n".format(channel.id, channelname)
+                msg += "{} :: {}\n".format(channel.id,
+                                           channelname)
                 count += 1
-        await self.bot.say("The server {} has {} text channels:".format(server.name, count))
+        await self.bot.say("The server {} has {} text "
+                           "channels:".format(server.name,
+                                              count))
         await self.bot.say(msg + "```")
 
     @commands.command()
@@ -104,7 +108,9 @@ class Config:
         """
         Checks what servers the bot is on"""
         servers = self.bot.servers
-        await self.bot.say("```asciidoc\nThe bot is in the following {} server(s):\n```".format(str(len(self.bot.servers))))
+        await self.bot.say("```asciidoc\nThe bot is in the following {} "
+                           "server(s):\n```".format(str(len(self.bot.servers))))
+
         msg = "```asciidoc\n"
         msg2 = "```asciidoc\n"
         msg3 = "```asciidoc\n"
@@ -178,7 +184,8 @@ class Config:
         await self.bot.say("The shutdown message is: ")
         await self.bot.say(msg)
         self.down.update({"Message" : msg})
-        dataIO.save_json(self.down_message, self.down)
+        dataIO.save_json(self.down_message,
+                         self.down)
 
     @commands.command(pass_context=True)
     @checks.is_owner()
@@ -209,14 +216,16 @@ def check_file():
     f = "data/servers/serverlist.json"
     if not dataIO.is_valid_json(f):
         print("Creating data/servers/serverlist.json")
-        dataIO.save_json(f, data)
+        dataIO.save_json(f,
+                         data)
 
 def check_file1():
     data = {}
     f = "data/servers/down_message.json"
     if not dataIO.is_valid_json(f):
         print("Creating data/servers/down_message.json")
-        dataIO.save_json(f, data)
+        dataIO.save_json(f,
+                         data)
 
 def setup(bot):
     check_folder()

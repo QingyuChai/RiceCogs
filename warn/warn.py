@@ -58,7 +58,9 @@ class Warn:
             message += "Kick Message - {}\n"
             message += "Warn Limit   - {}\n"
             message += "```"
-            await self.bot.say(message.format(msg, kick, _max))
+            await self.bot.say(message.format(msg,
+                                              kick,
+                                              _max))
 
     @_warnset.command(no_pm=True, pass_context=True, manage_server=True)
     async def pm(self, ctx):
@@ -93,7 +95,8 @@ class Warn:
             msg = true_msg
         else:
             msg = "Error."
-        dataIO.save_json(self.warning_settings, self.riceCog2)
+        dataIO.save_json(self.warning_settings,
+                         self.riceCog2)
         await self.bot.say(msg)
 
     @_warnset.command(no_pm=True, pass_context=True)
@@ -102,7 +105,8 @@ class Warn:
         server = ctx.message.server
 
         self.riceCog2[server.id]["max"] = limit
-        dataIO.save_json(self.warning_settings, self.riceCog2)
+        dataIO.save_json(self.warning_settings,
+                         self.riceCog2)
         await self.bot.say("Warn limit is now: \n{}".format(limit))
 
     @_warnset.command(no_pm=True, pass_context=True)
@@ -113,12 +117,14 @@ class Warn:
         To get a full list of information, use **warnset message** without any parameters."""
         if not msg:
             await self.bot.say("```Set the kick message.\n\n"
-                               "To get a full list of information, use **warnset message** without any parameters.```")
+                               "To get a full list of information, use "
+                               "**warnset message** without any parameters.```")
             return
         server = ctx.message.server
 
         self.riceCog2[server.id]["kick_message"] = msg
-        dataIO.save_json(self.warning_settings, self.riceCog2)
+        dataIO.save_json(self.warning_settings,
+                         self.riceCog2)
         await self.bot.say("Kick message is now: \n{}".format(msg))
 
     @_warnset.command(no_pm=True, pass_context=True)
@@ -130,7 +136,9 @@ class Warn:
         await self.bot.say("Are you sure you want to reset all warn settings"
                            "for this server?\n"
                            "Type **yes** within the next 15 seconds.")
-        msg = await self.bot.wait_for_message(author=author, channel=channel, timeout=15.0)
+        msg = await self.bot.wait_for_message(author=author,
+                                              channel=channel,
+                                              timeout=15.0)
         if msg.content.lower().strip() == "yes":
             self.riceCog2[server.id]["warn_message"] = default_warn
             self.riceCog2[server.id]["kick_message"] = default_kick
@@ -152,7 +160,8 @@ class Warn:
 
         Example:
 
-        **You, user.mention, have received Warning warn.count. After warn.limit, you will be kicked.**
+        **You, user.mention, have received Warning warn.count. After warn.limit,
+        you will be kicked.**
 
         You can set it either for every server.
         To set the kick message, use *warnset kick*
@@ -167,7 +176,9 @@ class Warn:
 
                                "Example:\n\n"
 
-                               "**You, user.mention, have received Warning warn.count. After warn.limit, you will be kicked.**\n\n"
+                               "**You, user.mention, have received Warning "
+                               "warn.count. After warn.limit, you will be "
+                               "kicked.**\n\n"
 
                                "You can set it either for every server.\n"
                                "To set the kick message, use *warnset kick*\n```")
@@ -177,15 +188,21 @@ class Warn:
         server = ctx.message.server
 
         self.riceCog2[server.id]["warn_message"] = msg
-        dataIO.save_json(self.warning_settings, self.riceCog2)
+        dataIO.save_json(self.warning_settings,
+                         self.riceCog2)
         await self.bot.say("Warn message is now: \n{}".format(msg))
 
     async def filter_message(self, msg, user, count, _max):
-        msg = msg.replace("user.mention", user.mention)
-        msg = msg.replace("user.name", user.name)
-        msg = msg.replace("user.id", user.id)
-        msg = msg.replace("warn.count", str(count))
-        msg = msg.replace("warn.limit", str(_max))
+        msg = msg.replace("user.mention",
+                          user.mention)
+        msg = msg.replace("user.name",
+                          user.name)
+        msg = msg.replace("user.id",
+                          user.id)
+        msg = msg.replace("warn.count",
+                          str(count))
+        msg = msg.replace("warn.limit",
+                          str(_max))
         return msg
 
     @commands.command(no_pm=True, pass_context=True)
@@ -357,16 +374,19 @@ class Warn:
 
         if server.id not in self.riceCog:
             self.riceCog[server.id] = {}
-            dataIO.save_json(self.profile, self.riceCog)
+            dataIO.save_json(self.profile,
+                             self.riceCog)
             if user.id not in self.riceCog[server.id]:
                 self.riceCog[server.id][user.id] = {}
-                dataIO.save_json(self.profile, self.riceCog)
+                dataIO.save_json(self.profile,
+                                 self.riceCog)
             else:
                 pass
         else:
             if user.id not in self.riceCog[server.id]:
                 self.riceCog[server.id][user.id] = {}
-                dataIO.save_json(self.profile, self.riceCog)
+                dataIO.save_json(self.profile,
+                                 self.riceCog)
             else:
                 pass
 
@@ -378,15 +398,18 @@ class Warn:
         if count != 0:
             msg = str(user.mention) + ", your warnings have been cleared!"
             data = discord.Embed(colour=colour)
-            data.add_field(name="Warning", value=msg)
+            data.add_field(name="Warning",
+                           value=msg)
             data.set_footer(text=self.bot.user.name)
             await self.bot.say(embed=data)
 
             count = 0
             self.riceCog[server.id][user.id].update({"Count" : count})
-            dataIO.save_json(self.profile, self.riceCog)
+            dataIO.save_json(self.profile,
+                             self.riceCog)
         else:
-            await self.bot.say("You don't have any warnings to clear, " + str(user.mention) + "!")
+            await self.bot.say("You don't have any warnings to clear, "
+                               + str(user.mention) + "!")
             #clear role
 
 
@@ -404,10 +427,12 @@ def check_file():
     g = "data/account/warning_settings.json"
     if not dataIO.is_valid_json(f):
         print("Creating data/account/warnings.json")
-        dataIO.save_json(f, data)
+        dataIO.save_json(f,
+                         data)
     if not dataIO.is_valid_json(g):
         print("Creating data/account/warning_settings.json")
-        dataIO.save_json(g, data)
+        dataIO.save_json(g,
+                         data)
 
 
 

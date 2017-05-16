@@ -7,8 +7,7 @@ from .utils.dataIO import dataIO
 from discord.ext import commands
 
 class Waitroom:
-    """"""
-
+    """Waitroom"""
     def __init__(self, bot):
         self.bot = bot
         self.waitroom = "data/waitroom/waitroom.json"
@@ -23,11 +22,14 @@ class Waitroom:
         server = ctx.message.server
         if server.id not in self.riceCog:
             self.riceCog[server.id] = channel.id
-            dataIO.save_json(self.waitroom, self.riceCog)
+            dataIO.save_json(self.waitroom,
+                             self.riceCog)
         else:
             self.riceCog[server.id] = channel.id
-            dataIO.save_json(self.waitroom, self.riceCog)
-        await self.bot.say("Succesfully changed the *Waitroom* channel to {}".format(channel.name))
+            dataIO.save_json(self.waitroom,
+                             self.riceCog)
+        await self.bot.say("Succesfully changed the *Waitroom* "
+                           "channel to {}".format(channel.name))
 
 
     @commands.command(pass_context=True)
@@ -43,15 +45,19 @@ class Waitroom:
                 count += 1
 
         if count == len(server.roles):
-            await self.bot.say("Role does not exist on this server. Please try again.")
+            await self.bot.say("Role does not exist on this server. "
+                               "Please try again.")
             return
         if server.id not in self.roleset:
             self.roleset[server.id] = default_role.id
-            dataIO.save_json(self.defaultrole, self.roleset)
+            dataIO.save_json(self.defaultrole,
+                             self.roleset)
         else:
             self.roleset[server.id] = default_role.id
-            dataIO.save_json(self.defaultrole, self.roleset)
-        await self.bot.say("Succesfully changed the default *role* to {}!".format(default_role))
+            dataIO.save_json(self.defaultrole,
+                             self.roleset)
+        await self.bot.say("Succesfully changed the default *role* to "
+                           "{}!".format(default_role))
 
     @commands.command(pass_context=True)
     async def register(self, ctx):
@@ -63,7 +69,8 @@ class Waitroom:
         if server.id in self.riceCog and server.id in self.roleset:
             default_role = self.roleset[server.id]
             await self.bot.say("Type **agreed** to get access to the server.")
-            msg = await self.bot.wait_for_message(author=author, channel=channel)
+            msg = await self.bot.wait_for_message(author=author,
+                                                  channel=channel)
             if msg.content.lower().strip() == "agreed":
                 try:
                     for role in server.roles:
@@ -79,8 +86,11 @@ class Waitroom:
             else:
                 await self.bot.say("Try again!")
         else:
-            await self.bot.say("You did not set the *Waitroom* channel yet! To do so, do {}setwaitroom [channel]!".format(prefix))
-            await self.bot.say("Also, set the default role using {}setdefaultrole [rolename]!".format(prefix))
+            await self.bot.say("You did not set the *Waitroom* channel yet! "
+                               "To do so, do {}setwaitroom "
+                               "[channel]!".format(prefix))
+            await self.bot.say("Also, set the default role using {}"
+                               "setdefaultrole [rolename]!".format(prefix))
 
 
 def check_folder():
@@ -93,14 +103,16 @@ def check_file():
     f = "data/waitroom/waitroom.json"
     if not dataIO.is_valid_json(f):
         print("Creating data/waitroom/waitroom.json")
-        dataIO.save_json(f, data)
+        dataIO.save_json(f,
+                         data)
 
 def check_file1():
     data = {}
     f = "data/waitroom/defaultrole.json"
     if not dataIO.is_valid_json(f):
         print("Creating data/waitroom/defaultrole.json")
-        dataIO.save_json(f, data)
+        dataIO.save_json(f,
+                         data)
 
 
 def setup(bot):

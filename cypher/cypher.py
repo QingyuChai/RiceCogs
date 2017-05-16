@@ -73,7 +73,8 @@ class Cypher:
         do_del = not do_del
 
         self.riceCog[server.id]['del'] = do_del
-        dataIO.save_json(self.profile, self.riceCog)
+        dataIO.save_json(self.profile,
+                         self.riceCog)
 
         if do_del:
             await self.bot.say("Message will be deleted.")
@@ -88,7 +89,8 @@ class Cypher:
         server = ctx.message.server
         if server.id in self.riceCog:
             del self.riceCog[server.id]
-        dataIO.save_json(self.profile, self.riceCog)
+        dataIO.save_json(self.profile,
+                         self.riceCog)
         await self.bot.say("Server settings deleted.")
 
     @checks.admin_or_permissions(manage_server=True)
@@ -112,8 +114,10 @@ class Cypher:
             self.riceCog[server.id] = {}
 
         self.riceCog[server.id]['charset'] = chars
-        dataIO.save_json(self.profile, self.riceCog)
-        await self.bot.say("```The character set is now:\n\n*{}*```".format(chars))
+        dataIO.save_json(self.profile,
+                         self.riceCog)
+        await self.bot.say("```The character set is now:"
+                           "\n\n*{}*```".format(chars))
 
     @commands.command(pass_context=True)
     async def encode(self, ctx, how_much : int, *, message):
@@ -142,8 +146,11 @@ class Cypher:
 
         tool = Code(chars)
 
-        result = await tool.code(how_much, 'en', message)
-        await self.bot.say("```You're encoded message is:\n\n{}```".format(result))
+        result = await tool.code(how_much,
+                                 'en',
+                                 message)
+        await self.bot.say("```You're encoded message is:"
+                           "\n\n{}```".format(result))
 
     @commands.command(pass_context=True)
     async def decode(self, ctx, how_much : int, *, message):
@@ -172,8 +179,11 @@ class Cypher:
 
         tool = Code(chars)
 
-        result = await tool.code(how_much, 'de', message)
-        await self.bot.say("```You're decoded message is:\n\n{}```".format(result))
+        result = await tool.code(how_much,
+                                 'de',
+                                 message)
+        await self.bot.say("```You're decoded message is:"
+                           "\n\n{}```".format(result))
 
 def check_folder():
     if not os.path.exists("data/cypher"):
@@ -185,7 +195,8 @@ def check_file():
     f = "data/cypher/charset.json"
     if not dataIO.is_valid_json(f):
         print("Creating data/cypher/charset.json")
-        dataIO.save_json(f, data)
+        dataIO.save_json(f,
+                         data)
 
 def setup(bot):
     check_folder()
