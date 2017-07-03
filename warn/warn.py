@@ -1,7 +1,7 @@
 """Warning cog"""
 
-#Credits go to Twentysix26 for modlog
-#https://github.com/Twentysix26/Red-DiscordBot/blob/develop/cogs/mod.py
+# Credits go to Twentysix26 for modlog
+# https://github.com/Twentysix26/Red-DiscordBot/blob/develop/cogs/mod.py
 #bot.change_nickname(user, display_name + "💩")
 import discord
 import os
@@ -23,7 +23,9 @@ default_warn = ("user.mention, you have received your "
 default_max = 3
 default_kick = ("After warn.limit warnings, user.name has been kicked.")
 
+
 class Warn:
+
     def __init__(self, bot):
         self.bot = bot
         self.profile = "data/account/warnings.json"
@@ -32,7 +34,6 @@ class Warn:
         self.riceCog2 = dataIO.load_json(self.warning_settings)
         if not self.bot.get_cog("Mod"):
             print("You need the Mod cog to run this cog effectively!")
-
 
     @commands.group(no_pm=True, pass_context=True, name='warnset')
     async def _warnset(self, ctx):
@@ -53,7 +54,7 @@ class Warn:
                 _max = self.riceCog2[server.id]["max"]
             except:
                 _max = default_max
-            message =  "```\n"
+            message = "```\n"
             message += "Warn Message - {}\n"
             message += "Kick Message - {}\n"
             message += "Warn Limit   - {}\n"
@@ -76,7 +77,6 @@ class Warn:
         elif not p:
             self.riceCog[server.id]['pm_warn'] = True
             await self.bot.say("Warnings are now in DM.")
-
 
     @_warnset.command(no_pm=True, pass_context=True, manage_server=True)
     async def poop(self, ctx):
@@ -101,7 +101,7 @@ class Warn:
 
     @_warnset.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True, manage_server=True)
-    async def max(self, ctx, limit : int):
+    async def max(self, ctx, limit: int):
         server = ctx.message.server
 
         self.riceCog2[server.id]["max"] = limit
@@ -149,7 +149,7 @@ class Warn:
 
     @_warnset.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True, manage_server=True)
-    async def message(self, ctx, *, msg = None):
+    async def message(self, ctx, *, msg=None):
         """Set the warning message
 
         user.mention - mentions the user
@@ -184,7 +184,6 @@ class Warn:
                                "To set the kick message, use *warnset kick*\n```")
             return
 
-
         server = ctx.message.server
 
         self.riceCog2[server.id]["warn_message"] = msg
@@ -207,7 +206,7 @@ class Warn:
 
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
-    async def warn(self, ctx, user : discord.Member, *, reason=None):
+    async def warn(self, ctx, user: discord.Member, *, reason=None):
         """Warns the user - At 3 warnings the user gets kicked
 
         Thank you, 26, for the modlog"""
@@ -230,6 +229,9 @@ class Warn:
             kick = default_kick
             _max = default_max
 
+        if server.id not in self.riceCog:
+            self.riceCog[server.id] = {}
+
         if 'pm_warn' not in self.riceCog[server.id]:
             self.riceCog[server.id]['pm_warn'] = False
 
@@ -250,7 +252,7 @@ class Warn:
 
         colour = server.me.colour
 
-        #checks if the user is in the file
+        # checks if the user is in the file
         if server.id not in self.riceCog2:
             self.riceCog2[server.id] = {}
             dataIO.save_json(self.warning_settings,
@@ -280,7 +282,7 @@ class Warn:
 
         cog = self.bot.get_cog('Mod')
 
-        #checks how many warnings the user has
+        # checks how many warnings the user has
         if count != _max - 1:
             count += 1
             msg = await self.filter_message(msg=msg,
@@ -299,7 +301,7 @@ class Warn:
                 await self.bot.send_message(user, embed=data)
             elif not p:
                 await self.bot.say(embed=data)
-            self.riceCog[server.id][user.id].update({"Count" : count})
+            self.riceCog[server.id][user.id].update({"Count": count})
             dataIO.save_json(self.profile,
                              self.riceCog)
             log = None
@@ -322,7 +324,7 @@ class Warn:
             elif not p:
                 await self.bot.say(embed=data)
             count = 0
-            self.riceCog[server.id][user.id].update({"Count" : count})
+            self.riceCog[server.id][user.id].update({"Count": count})
             dataIO.save_json(self.profile,
                              self.riceCog)
             log = "KICK"
@@ -363,11 +365,9 @@ class Warn:
                                reason="No reason provided yet.")
             await self.bot.kick(user)
 
-
-
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
-    async def clean(self, ctx, user : discord.Member):
+    async def clean(self, ctx, user: discord.Member):
         author = ctx.message.author
         server = author.server
         colour = server.me.colour
@@ -404,22 +404,20 @@ class Warn:
             await self.bot.say(embed=data)
 
             count = 0
-            self.riceCog[server.id][user.id].update({"Count" : count})
+            self.riceCog[server.id][user.id].update({"Count": count})
             dataIO.save_json(self.profile,
                              self.riceCog)
         else:
             await self.bot.say("You don't have any warnings to clear, "
                                + str(user.mention) + "!")
-            #clear role
-
-
-
+            # clear role
 
 
 def check_folder():
     if not os.path.exists("data/account"):
         print("Creating data/account/server.id folder")
         os.makedirs("data/account")
+
 
 def check_file():
     data = {}
@@ -433,7 +431,6 @@ def check_file():
         print("Creating data/account/warning_settings.json")
         dataIO.save_json(g,
                          data)
-
 
 
 def setup(bot):
