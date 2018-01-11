@@ -15,7 +15,16 @@ from .utils.dataIO import fileIO, dataIO
 from .utils import checks
 from discord.ext import commands
 from enum import Enum
-from __main__ import send_cmd_help
+from collections import deque, defaultdict, OrderedDict
+from __main__ import send_cmd_help, settings
+
+default_settings = {
+    "ban_mention_spam"  : False,
+    "delete_repeats"    : False,
+    "mod-log"           : None,
+    "respect_hierarchy" : False
+}
+
 
 default_warn = ("user.mention, you have received your "
                 "warning #warn.count! At warn.limit warnings you "
@@ -30,6 +39,8 @@ class Warn:
         self.bot = bot
         self.profile = "data/account/warnings.json"
         self.riceCog = dataIO.load_json(self.profile)
+        settings = dataIO.load_json("data/mod/settings.json")
+        self.settings = defaultdict(lambda: default_settings.copy(), settings)
         self.warning_settings = "data/account/warning_settings.json"
         self.riceCog2 = dataIO.load_json(self.warning_settings)
         if not self.bot.get_cog("Mod"):
@@ -204,6 +215,22 @@ class Warn:
                           str(_max))
         return msg
 
+        
+    async def hierarchy(self, ctx):
+        """Toggles role hierarchy check for mods / admins"""
+        server = ctx.message.server
+        toggled = self.settings[server.id].get("respect_hierarchy",
+                                               default_settings["respect_hierarchy"])
+        if not toggled:
+            self.settings[server.id]["respect_hierarchy"] = True
+            await self.bot.say("Role hierarchy will be checked when "
+                               "moderation commands are issued.")
+        else:
+            self.settings[server.id]["respect_hierarchy"] = False
+            await self.bot.say("Role hierarchy will be ignored when "
+                               "moderation commands are issued.")
+        dataIO.save_json("data/mod/settings.json", self.settings)
+        
     @commands.command(no_pm=True, pass_context=True)
     @checks.admin_or_permissions(kick_members=True)
     async def warn(self, ctx, user: discord.Member, *, reason=None):
@@ -215,10 +242,19 @@ class Warn:
         channel = ctx.message.channel
 
         can_kick = channel.permissions_for(server.me).kick_members
-        can_role = channel.permissions_for(server.me).manage_roles
-
+        can_role = channel.permissions_for(server.me).manage_roles    
+        
+        if author == user:
+            await self.bot.say("I cannot let you do that. Self-harm is "
+                               "bad \N{PENSIVE FACE}")
+            return
+        elif not self.is_allowed_by_hierarchy(server, author, user):
+            await self.bot.say("I cannot let you do that. You are "
+                               "not higher than the user in the role "
+                               "hierarchy.")
+            return
         if can_kick:
-            pass
+           pass
         else:
             await self.bot.say("Sorry, I can't warn this user.\n"
                                "I am missing the `kick_members` permission")
@@ -412,7 +448,15 @@ class Warn:
                                + str(user.mention) + "!")
             # clear role
 
+    def is_allowed_by_hierarchy(self, server, mod, user):
+        toggled = self.settings[server.id].get("respect_hierarchy",
+                                               default_settings["respect_hierarchy"])
+        is_special = mod == server.owner or mod.id == self.bot.settings.owner
 
+        if not toggled:
+            return True
+        else:
+            return mod.top_role.position > user.top_role.position or is_special 
 def check_folder():
     if not os.path.exists("data/account"):
         print("Creating data/account/server.id folder")
@@ -433,6 +477,7 @@ def check_file():
                          data)
 
 
+                        
 def setup(bot):
     check_folder()
     check_file()
