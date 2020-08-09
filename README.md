@@ -1,5 +1,7 @@
 # RiceCogs
 
+# As you probably noticed, this isn't maintained anymore. Feel free to use any of this code for your own projects.
+
 Hello! FwiedWice here.
 
 Cogs:
@@ -23,4 +25,4 @@ Special thanks to Kowlin for basically teaching me how to code.
 Another thanks to FlapJack, whose README I stole, and Redjumpman, from whom FlapJack got it.
 
 # License
-MIT License
+Just do whatever you want with the code!
